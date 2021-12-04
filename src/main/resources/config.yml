@@ -1,0 +1,61 @@
+# 实体数量控制
+EntityNum:
+  # 实体数量大于 MinEntity 才会进行清理
+  MinEntity: 100
+  # 实体数量大于 MaxEntity 立即进行一次清理 (-1关闭此功能)
+  MaxEntity: 1000
+
+
+# 清理周期 秒  3600为 1 小时
+ClearTime: 3600
+
+# 清理消息
+ClearMessages:
+  ClearBefore: '&b[服务器娘]&a实体和掉落物将在 &e%TIME%秒 &a后清除!'
+  ClearComplete: '&b[服务器娘]&a哎哟，这次清理了 &c%COUNT%个 &a垃圾，我感觉自己萌萌哒~'
+
+# 清理前多少秒发送一次提示
+MessageTime:
+  - 60
+  - 30
+  - 10
+  - 5
+
+# 清理掉落物
+DropItems: true
+
+# 清理命名实体
+Nam: true
+
+# 无视非原版实体
+# 关闭后非原版实体会根据 animals 与 monster 进行清除
+# 非原版实体建议使用 ce list 查看进行手动配置
+Minecraft: true
+
+# ----------------------------全局设置
+#  animals 与 monster 优先级是最低的
+# 当你在 黑名单中 填入了 minecraft:sheep(羊) 白名单中 有 animals 仍然会被清除
+# 返之 白名单 填入了 minecraft:zombie(僵尸) 则不会被清楚
+
+# 白名单
+EntityWhite:
+  # 动物
+  - 'animals'
+# 黑名单
+EntityBlack:
+  # 怪物
+  - 'monster'
+
+
+# 自定义某世界的黑白名单
+CustomWorld:
+# 世界名
+#   World:
+# 白名单
+#     EntityWhite:
+#       #动物
+#       - 'animals'
+# 黑名单
+#     EntityBlack:
+#       #怪物
+#       - 'monster'

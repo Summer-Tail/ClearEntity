@@ -1,0 +1,14 @@
+name: ClearEntity
+version: ${project.version}
+main: xyz.lvsheng.clearentity.Main
+api-version: 1.16
+commands:
+  ClearEntity:
+    aliases:
+      - ce
+    description: "/ClearEntity help  - Show Commands"
+    permission: "ClearEntity.admin"
+permissions:
+  ClearEntity.admin:
+    default: op
+    description: "use /ClearEntity *"
