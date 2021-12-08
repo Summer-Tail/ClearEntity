@@ -8,16 +8,18 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import xyz.lvsheng.clearentity.ClearEntity;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class Util implements Callable<Integer> {
-    private static final String version;
+    private static final String VERSION;
+    private static String FOUND;
 
     //获取服务器版本号
     static {
-        version = getVersion();
+        VERSION = getVersion();
     }
 
 
@@ -59,12 +61,12 @@ public class Util implements Callable<Integer> {
         try {
 
             Object craft = Class.forName
-                    ("org.bukkit.craftbukkit." + version + "." + "entity.CraftEntity").cast(entity);
+                    ("org.bukkit.craftbukkit." + VERSION + "." + "entity.CraftEntity").cast(entity);
             Object nms = craft.getClass().getMethod("getHandle").invoke(craft);
-            return (String) nms.getClass().getMethod("getSaveID").invoke(nms);
+            return (String) nms.getClass().getMethod(FOUND).invoke(nms);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return null;
         }
     }
@@ -161,12 +163,20 @@ public class Util implements Callable<Integer> {
      */
     private static String getVersion() {
         String[] split = Bukkit.getBukkitVersion().split("\\.");
-        String version = "v" + split[0] + "_" + split[1] + "_R";
+        String version = "v" + split[0] + "_" + split[1].replaceAll("-R.*", "") + "_R";
 
         for (int i = 1; i < 10; i++) {
             try {
                 Class.forName("org.bukkit.craftbukkit." + version + i + ".entity.CraftEntity");
-                Bukkit.getConsoleSender().sendMessage(ColorMessage("&a[ClearEntity] &e获取服务器版本成功 " + version));
+
+                //高版本方法名不一致
+                if (Integer.parseInt(split[1].replaceAll("-R.*", "")) > 17) {
+                    FOUND="bk";
+                } else {
+                    FOUND="getSaveID";
+                }
+
+                Bukkit.getConsoleSender().sendMessage(ColorMessage("&a[ClearEntity] &e获取服务器版本成功 " + version + i));
                 return version + i;
             } catch (Exception ignored) {
                 //忽略异常
@@ -175,6 +185,7 @@ public class Util implements Callable<Integer> {
 
 
         Bukkit.getConsoleSender().sendMessage(ColorMessage("&4[ClearEntity] &c严重错误,无法获取服务器版本,插件将无法正常运行,请尝试更新插件!!!"));
+        ClearEntity.plugins.onDisable();
         return null;
     }
 

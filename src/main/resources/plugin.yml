@@ -1,6 +1,6 @@
 name: ClearEntity
 version: ${project.version}
-main: xyz.lvsheng.clearentity.Main
+main: xyz.lvsheng.clearentity.ClearEntity
 api-version: 1.16
 commands:
   ClearEntity:
