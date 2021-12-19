@@ -39,6 +39,9 @@ Minecraft: true
 
 # 白名单
 EntityWhite:
+  # 钻石镐
+  #- 'item:diamond_pickaxe'
+
   # 动物
   - 'animals'
 # 黑名单

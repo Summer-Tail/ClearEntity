@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
 import xyz.lvsheng.clearentity.ClearEntity;
 
@@ -127,6 +128,18 @@ public class Util implements Callable<Integer> {
         //清理掉落物
         if (ClearEntity.configUtil.isDropItems()) {
             black.add("minecraft:item");
+
+            //识别物品名
+            if (entity instanceof Item) {
+
+                String itemName = ((Item) entity).getItemStack().getType().name();
+
+                if (equalsIgnoreCase(white,"item:"+itemName)){
+                    return false;
+                }
+
+            }
+
         } else {
             black.remove("minecraft:item");
         }
@@ -171,9 +184,9 @@ public class Util implements Callable<Integer> {
 
                 //高版本方法名不一致
                 if (Integer.parseInt(split[1].replaceAll("-R.*", "")) > 17) {
-                    FOUND="bk";
+                    FOUND = "bk";
                 } else {
-                    FOUND="getSaveID";
+                    FOUND = "getSaveID";
                 }
 
                 Bukkit.getConsoleSender().sendMessage(ColorMessage("&a[ClearEntity] &e获取服务器版本成功 " + version + i));
