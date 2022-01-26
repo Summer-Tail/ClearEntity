@@ -46,77 +46,93 @@ public class EntityClear implements Runnable, Callable<Integer> {
         }
 
 
-        String[] split = id.split(":");
         //忽略非原版生物
-        if (split.length != 0) {
-            if (ConfigUtil.getMinecraft() && !"minecraft".equalsIgnoreCase(split[0])) {
-                return false;
-            }
-        }
-
-
-        //全局规则
-        if (!Utils.equalsIgnoreCase(ConfigUtil.getCustomWorld(), entity.getWorld().getName())) {
-            black = ConfigUtil.getEntityBlack();
-            white = ConfigUtil.getEntityWhite();
-        } else {
-            //自定义规则
-            black = ConfigUtil.getConfig().getStringList
-                    ("CustomWorld." + entity.getWorld().getName() + ".EntityBlack");
-            white = ConfigUtil.getConfig().getStringList
-                    ("CustomWorld." + entity.getWorld().getName() + ".EntityWhite");
-        }
-
-
-        //清理掉落物
-        if (ConfigUtil.isDropItems()) {
-            black.add("minecraft:item");
-
-            //识别物品名
-            if (entity instanceof Item) {
-
-                String itemName = ((Item) entity).getItemStack().getType().name();
-
-                if (Utils.equalsIgnoreCase(white, "item:" + itemName)) {
-                    return false;
-                }
-
-            }
-
-        } else {
-            black.remove("minecraft:item");
-        }
-
-
-        //白名单实体
-        if (Utils.equalsIgnoreCase(white, id)) {
+        if (ConfigUtil.getMinecraft() && id.startsWith("minecraft")) {
             return false;
         }
 
 
-        //黑名单实体
-        if (Utils.equalsIgnoreCase(black, id)) {
-            return true;
+    //全局规则
+        if(!Utils.equalsIgnoreCase(ConfigUtil.getCustomWorld(),entity.getWorld().
+
+    getName()))
+
+    {
+        black = ConfigUtil.getEntityBlack();
+        white = ConfigUtil.getEntityWhite();
+    } else
+
+    {
+        //自定义规则
+        black = ConfigUtil.getConfig().getStringList
+                ("CustomWorld." + entity.getWorld().getName() + ".EntityBlack");
+        white = ConfigUtil.getConfig().getStringList
+                ("CustomWorld." + entity.getWorld().getName() + ".EntityWhite");
+    }
+
+
+    //清理掉落物
+        if(ConfigUtil.isDropItems())
+
+    {
+        black.add("minecraft:item");
+
+        //识别物品名
+        if (entity instanceof Item) {
+
+            String itemName = ((Item) entity).getItemStack().getType().name();
+
+            if (Utils.equalsIgnoreCase(white, "item:" + itemName)) {
+                return false;
+            }
+
         }
 
+    } else
 
-        //未配置实体
-        if (Utils.equalsIgnoreCase(black, "monster")) {
-            return entity instanceof Monster;
-        }
-
-
-        if (Utils.equalsIgnoreCase(black, "animals")) {
-            return entity instanceof Animals;
-        }
+    {
+        black.remove("minecraft:item");
+    }
 
 
+    //白名单实体
+        if(Utils.equalsIgnoreCase(white,id))
+
+    {
         return false;
     }
 
 
+    //黑名单实体
+        if(Utils.equalsIgnoreCase(black,id))
+
+    {
+        return true;
+    }
+
+
+    //未配置实体
+        if(Utils.equalsIgnoreCase(black,"monster"))
+
+    {
+        return entity instanceof Monster;
+    }
+
+
+        if(Utils.equalsIgnoreCase(black,"animals"))
+
+    {
+        return entity instanceof Animals;
+    }
+
+
+        return false;
+}
+
+
     /**
      * 实体清除
+     *
      * @return 成功被清除的实体数量
      */
     private int clear() {
@@ -140,7 +156,6 @@ public class EntityClear implements Runnable, Callable<Integer> {
         }
         return remove;
     }
-
 
 
     /**
