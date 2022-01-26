@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.lvsheng.clearentity.clear.ClearTimer;
 import xyz.lvsheng.clearentity.commands.Ce;
-import xyz.lvsheng.clearentity.utils.ConfigUtil;
+import xyz.lvsheng.clearentity.utils.Metrics;
 import xyz.lvsheng.clearentity.utils.Utils;
 
 import java.util.Objects;
@@ -17,6 +17,12 @@ public final class ClearEntity extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        try {
+            new Metrics(this, 14080);
+        }catch (Throwable ignore){
+            //
+        }
+
         this.init();
         Bukkit.getConsoleSender().sendMessage(Utils.colorMessage("&a[ClearEntity] &e插件加载成功!"));
     }
@@ -29,6 +35,8 @@ public final class ClearEntity extends JavaPlugin {
     }
 
     private void init() {
+
+
 
         plugins = this;
         saveDefaultConfig();

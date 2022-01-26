@@ -10,7 +10,9 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import xyz.lvsheng.clearentity.ClearEntity;
 import xyz.lvsheng.clearentity.clear.EntityClear;
@@ -65,7 +67,9 @@ public class Ce implements TabExecutor {
 
         HashMap<String, Integer> map = new HashMap<>();
         int entityNum = 0;
-
+        int animals = 0;
+        int monster = 0;
+        int rules = 0;
         for (World world : Bukkit.getWorlds())
 
             for (Entity entity : world.getEntities()) {
@@ -83,11 +87,26 @@ public class Ce implements TabExecutor {
                 }
 
                 map.put(id, map.get(id) == null ? 1 : map.get(id) + 1);
+
+                if (entity instanceof Animals) {
+                    animals++;
+                }
+                if (entity instanceof Monster) {
+                    monster++;
+                }
+                if (EntityClear.getRules(entity)) {
+                    rules++;
+                }
                 entityNum++;
 
             }
 
-        sender.sendMessage("- §b共发现了 §e" + entityNum + " §b个实体 种类: §e" + map.size());
+        sender.sendMessage(
+                "- §b共发现了 §e" + entityNum +
+                        " §b个实体 种类: §e" + map.size() +
+                        " §b动物: §e" + animals +
+                        " §b怪物: §e" + monster +
+                        " §b符合规则: §e" + rules);
 
 
         try {
