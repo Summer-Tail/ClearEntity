@@ -1,4 +1,4 @@
-package xyz.lvsheng.clearentity.Commands;
+package xyz.lvsheng.clearentity.commands;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -11,10 +11,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import xyz.lvsheng.clearentity.ClearEntity;
-import xyz.lvsheng.clearentity.Utils.Util;
+import xyz.lvsheng.clearentity.clear.EntityClear;
+import xyz.lvsheng.clearentity.utils.Utils;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,13 +25,7 @@ public class Ce implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender senders, Command command, String alias, String[] args) {
-        List<String> list = new ArrayList<>();
-        if (args.length == 1) {
-            list.add("clear");
-            list.add("list");
-            list.add("reload");
-        }
-        return list;
+        return Arrays.asList("clear", "list", "reload");
     }
 
     @Override
@@ -61,7 +57,7 @@ public class Ce implements TabExecutor {
 
 
     private void clear() {
-        Bukkit.getScheduler().runTask(ClearEntity.plugins, new xyz.lvsheng.clearentity.Clear.ClearEntity());
+        Bukkit.getScheduler().runTask(ClearEntity.plugins, new EntityClear());
     }
 
 
@@ -69,28 +65,31 @@ public class Ce implements TabExecutor {
 
         HashMap<String, Integer> map = new HashMap<>();
         int entityNum = 0;
+
         for (World world : Bukkit.getWorlds())
+
             for (Entity entity : world.getEntities()) {
-                if (!"Player".equalsIgnoreCase(entity.getType().name())) {
-                    String id = Util.getID(entity);
-                    if (id != null) {
-                        if (map.containsKey(id)) {
-                            map.put(id, map.get(id) + 1);
-                        } else {
-                            map.put(id, 1);
-                        }
-                    } else {
-                        if (map.containsKey("未知实体")) {
-                            map.put("未知实体", map.get("未知实体") + 1);
-                        } else {
-                            map.put("未知实体", 1);
-                        }
-                    }
-                    entityNum++;
+
+                //忽略玩家
+                if (entity instanceof Player) {
+                    continue;
                 }
+
+                String id = Utils.getID(entity);
+                if (id == null) {
+                    Integer eNum = map.get("未知实体");
+                    map.put("未知实体", eNum == null ? 1 : eNum + 1);
+                    continue;
+                }
+
+                map.put(id, map.get(id) == null ? 1 : map.get(id) + 1);
+                entityNum++;
+
             }
 
         sender.sendMessage("- §b共发现了 §e" + entityNum + " §b个实体 种类: §e" + map.size());
+
+
         try {
             //向下兼容低版本 低版本中无此类
             Class.forName("net.md_5.bungee.api.chat.hover.content.Content");
@@ -125,9 +124,9 @@ public class Ce implements TabExecutor {
 
     private void help() {
         sender.sendMessage("- §a[ClearEntity] §e帮助-------------------#");
-        sender.sendMessage("- §b/ClearEntity clear:");
+        sender.sendMessage("- §b/ClearEntity clear");
         sender.sendMessage("- §e立即清理一次实体(不会有倒计时)");
-        sender.sendMessage("- §b/ClearEntity list ");
+        sender.sendMessage("- §b/ClearEntity list");
         sender.sendMessage("- §e查询世界中存在的实体列表");
         sender.sendMessage("- §b/ClearEntity reload");
         sender.sendMessage("- §e重新载入配置文件");
@@ -136,7 +135,7 @@ public class Ce implements TabExecutor {
     }
 
     private void test() {
-
+        sender.sendMessage("hello " + sender.getName());
     }
 
 }

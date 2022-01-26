@@ -1,7 +1,7 @@
 name: ClearEntity
 version: ${project.version}
 main: xyz.lvsheng.clearentity.ClearEntity
-api-version: 1.16
+api-version: 1.13
 commands:
   ClearEntity:
     aliases:
