@@ -69,7 +69,7 @@ public class Utils {
             try {
                 getSaveID = nmsEntity.getClass().getMethod(found == null ? "getSaveID" : found);
                 found = "getSaveID";
-            } catch (NoSuchMethodError e) {
+            } catch (NoSuchMethodException e) {
                 //1.18方法名变动
                 getSaveID = nmsEntity.getClass().getMethod("bk");
                 found = "bk";
