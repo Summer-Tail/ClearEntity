@@ -20,8 +20,9 @@ public class TeListener implements Listener {
 
         Entity entity = event.getEntity();
         Entity target = event.getTarget();
+
         if (target == null) {
-            EntityClear.ignore.remove(entity.getEntityId());
+            EntityClear.ignore.remove((Object)entity.getEntityId());
             return;
         }
         EntityClear.ignore.add(entity.getEntityId());
