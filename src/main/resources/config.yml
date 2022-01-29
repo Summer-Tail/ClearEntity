@@ -32,6 +32,10 @@ Nam: true
 # 非原版实体建议使用 ce list 查看进行手动配置
 Minecraft: true
 
+#忽略正在追踪玩家的实体
+#如一个怪物正在追玩家,那么修改为true后该实体将不会被清除
+Trace: false
+
 # ----------------------------全局设置
 #  animals 与 monster 优先级是最低的
 # 当你在 黑名单中 填入了 minecraft:sheep(羊) 白名单中 有 animals 仍然会被清除

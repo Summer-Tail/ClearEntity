@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.lvsheng.clearentity.clear.ClearTimer;
 import xyz.lvsheng.clearentity.commands.Ce;
+import xyz.lvsheng.clearentity.event.TeListener;
 import xyz.lvsheng.clearentity.utils.Metrics;
 import xyz.lvsheng.clearentity.utils.Utils;
 
@@ -42,6 +43,8 @@ public final class ClearEntity extends JavaPlugin {
         saveDefaultConfig();
         //注册命令
         Objects.requireNonNull(getCommand("ClearEntity")).setExecutor(new Ce());
+        //注册事件
+        Bukkit.getPluginManager().registerEvents(new TeListener(),this);
         //计时清理
         task = new ClearTimer().runTaskTimerAsynchronously(this, 20 * 30, 20 * 30);
 
