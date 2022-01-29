@@ -37,7 +37,7 @@ public class EntityClear implements Runnable, Callable<Integer> {
         }
 
         //忽略可能正在追踪玩家的实体
-        if (ignore.contains(entity.getEntityId())){
+        if (ConfigUtil.getConfig().getBoolean("Trace") && ignore.contains(entity.getEntityId())){
             return false;
         }
 
