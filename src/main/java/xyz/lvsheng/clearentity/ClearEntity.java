@@ -23,6 +23,13 @@ public final class ClearEntity extends JavaPlugin {
         }catch (Throwable ignore){
             //
         }
+        
+        try {
+            Class.forName("com.mohistmc.MohistMC");
+            getLogger().info("不支持Mohist");
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        } catch (ClassNotFoundException ignored) {}
 
         this.init();
         Bukkit.getConsoleSender().sendMessage(Utils.colorMessage("&a[ClearEntity] &e插件加载成功!"));
@@ -36,6 +43,9 @@ public final class ClearEntity extends JavaPlugin {
     }
 
     private void init() {
+
+
+
         plugins = this;
         saveDefaultConfig();
         //注册命令
@@ -44,6 +54,6 @@ public final class ClearEntity extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new TeListener(),this);
         //计时清理
         task = new ClearTimer().runTaskTimerAsynchronously(this, 20 * 30, 20 * 30);
-        if (this.getServer().getVersion().toLowerCase().contains("mohist")) throw new RuntimeException("不支持Mohist");
+
     }
 }
