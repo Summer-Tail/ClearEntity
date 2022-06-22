@@ -116,13 +116,22 @@ public final class ClearEntity extends JavaPlugin {
                 //
             }
 
-            //1.18+
+            //1.18
             try {
                 nmsEntity.getClass().getMethod("bk");
                 return "bk";
             } catch (Exception ignore) {
                 //
             }
+
+            //1.19
+            try {
+                nmsEntity.getClass().getMethod("bo");
+                return "bk";
+            } catch (Exception ignore) {
+                //
+            }
+
 
             //return (String) getSaveID.invoke(nmsEntity);
         } catch (Exception e) {
