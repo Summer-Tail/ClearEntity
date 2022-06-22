@@ -116,6 +116,14 @@ public final class ClearEntity extends JavaPlugin {
                 //
             }
 
+            //1.19 因1.19中也存在bk方法所以需要在前面执行
+            try {
+                nmsEntity.getClass().getMethod("bo");
+                return "bo";
+            } catch (Exception ignore) {
+                //
+            }
+
             //1.18
             try {
                 nmsEntity.getClass().getMethod("bk");
@@ -124,13 +132,7 @@ public final class ClearEntity extends JavaPlugin {
                 //
             }
 
-            //1.19
-            try {
-                nmsEntity.getClass().getMethod("bo");
-                return "bo";
-            } catch (Exception ignore) {
-                //
-            }
+
 
 
             //return (String) getSaveID.invoke(nmsEntity);
