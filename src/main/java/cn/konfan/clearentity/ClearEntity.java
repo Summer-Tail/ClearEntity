@@ -127,7 +127,7 @@ public final class ClearEntity extends JavaPlugin {
             //1.19
             try {
                 nmsEntity.getClass().getMethod("bo");
-                return "bk";
+                return "bo";
             } catch (Exception ignore) {
                 //
             }
