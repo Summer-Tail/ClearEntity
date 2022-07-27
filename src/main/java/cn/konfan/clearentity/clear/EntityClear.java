@@ -27,8 +27,12 @@ public class EntityClear implements Runnable {
 
         //命名生物处理
         if (!Utils.getConfig().getBoolean("Rules.Nam")) {
-            if (entity.getCustomName() == null) {
-                return false;
+            try {
+                if (entity.getCustomName() != null) {
+                    return false;
+                }
+            }catch (NullPointerException ignore){
+                //
             }
         }
 
