@@ -31,7 +31,7 @@ public class EntityClear implements Runnable {
                 if (entity.getCustomName() != null) {
                     return false;
                 }
-            }catch (NullPointerException ignore){
+            } catch (NullPointerException ignore) {
                 //
             }
         }
@@ -148,10 +148,18 @@ public class EntityClear implements Runnable {
         for (World world : Bukkit.getWorlds()) {
 
             for (Entity entity : world.getEntities()) {
-
-                if (getRules(entity)) {
+                String saveID = Utils.getSaveID(entity);
+                boolean rules = getRules(entity);
+                if (rules) {
                     entity.remove();
                     num++;
+                }
+
+                String debug = Utils.getConfig().getString("Debug");
+                if (debug != null) {
+                    if (debug.equals(saveID)) {
+                        System.out.println("[DEBUG]: " + saveID + "[" + rules + "]");
+                    }
                 }
 
             }
