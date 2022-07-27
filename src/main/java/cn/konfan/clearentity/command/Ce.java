@@ -1,6 +1,7 @@
 package cn.konfan.clearentity.command;
 
 import cn.konfan.clearentity.ClearEntity;
+import cn.konfan.clearentity.gui.BinGui;
 import cn.konfan.clearentity.task.ClearTask;
 import cn.konfan.clearentity.utils.Utils;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -76,6 +77,8 @@ public class Ce implements TabExecutor {
             case "egg":
                 sender.sendMessage("_Godson");
                 break;
+            case "open":
+                BinGui.openGUI((Player) sender);
             default:
                 this.help(sender);
 

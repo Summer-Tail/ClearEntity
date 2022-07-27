@@ -3,6 +3,7 @@ package cn.konfan.clearentity;
 import cn.konfan.clearentity.command.Ce;
 import cn.konfan.clearentity.event.EntitySpawnListener;
 import cn.konfan.clearentity.event.ExplodeProtectionListener;
+import cn.konfan.clearentity.gui.BinGui;
 import cn.konfan.clearentity.task.ClearTask;
 import cn.konfan.clearentity.task.EntityNumTask;
 import cn.konfan.clearentity.utils.Metrics;
@@ -21,6 +22,8 @@ public final class ClearEntity extends JavaPlugin {
     public static String method;
     public static ClearEntity plugin;
     public static Integer clearTask;
+
+    public static BinGui binGui;
 
 
     @Override
@@ -49,7 +52,7 @@ public final class ClearEntity extends JavaPlugin {
 
         //写出配置文件
         saveDefaultConfig();
-        saveResource("messages.yml",false);
+        saveResource("messages.yml", false);
 
 
         plugin = this;
@@ -67,8 +70,10 @@ public final class ClearEntity extends JavaPlugin {
         //注册事件,用于禁止实体的生成
         Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
         //注册事件,用于阻止爆炸破坏地形
-        Bukkit.getPluginManager().registerEvents(new ExplodeProtectionListener(),this);
+        Bukkit.getPluginManager().registerEvents(new ExplodeProtectionListener(), this);
 
+
+        binGui = new BinGui();
     }
 
     /**
@@ -131,8 +136,6 @@ public final class ClearEntity extends JavaPlugin {
             } catch (Exception ignore) {
                 //
             }
-
-
 
 
             //return (String) getSaveID.invoke(nmsEntity);
