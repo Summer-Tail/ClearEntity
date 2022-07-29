@@ -5,6 +5,10 @@ Clear:
   #大于 2000 个实体立即进行一次清理
   Max: 2000
 
+Bin:
+  Enable: true
+  Page: 4
+
 #清理周期 (秒)
 Time: 1800
 

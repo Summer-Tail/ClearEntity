@@ -1,9 +1,11 @@
 package cn.konfan.clearentity.clear;
 
+import cn.konfan.clearentity.gui.BinGui;
 import cn.konfan.clearentity.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Set;
@@ -152,7 +154,14 @@ public class EntityClear implements Runnable {
                 boolean rules = getRules(entity);
                 if (rules) {
                     entity.remove();
-                    num++;
+                    if (entity.isDead()){
+                        if (entity instanceof Item){
+                            System.out.println(((Item) entity).getItemStack().getType());
+                            BinGui.addItem(((Item) entity).getItemStack());
+                        }
+                        num++;
+                    }
+
                 }
 
                 String debug = Utils.getConfig().getString("Debug");

@@ -4,6 +4,7 @@ import cn.konfan.clearentity.command.Ce;
 import cn.konfan.clearentity.event.EntitySpawnListener;
 import cn.konfan.clearentity.event.ExplodeProtectionListener;
 import cn.konfan.clearentity.gui.BinGui;
+import cn.konfan.clearentity.gui.GUIListener;
 import cn.konfan.clearentity.task.ClearTask;
 import cn.konfan.clearentity.task.EntityNumTask;
 import cn.konfan.clearentity.utils.Metrics;
@@ -12,20 +13,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 public final class ClearEntity extends JavaPlugin {
     public static String version;
     public static String method;
     public static ClearEntity plugin;
     public static Integer clearTask;
-
-    public static BinGui binGui;
-
-
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -42,6 +42,20 @@ public final class ClearEntity extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         Bukkit.getScheduler().cancelTask(clearTask);
+
+        //关闭所有玩家的GUI
+        Set<UUID> uuids = BinGui.pageGuiMap.keySet();
+        for (UUID uuid : uuids) {
+            try {
+                Objects.requireNonNull(Bukkit.getPlayer(uuid)).closeInventory();
+            }catch (NullPointerException ignore){
+                //
+            }
+        }
+        BinGui.pageGuiMap.clear();
+
+
+
     }
 
     /**
@@ -72,8 +86,8 @@ public final class ClearEntity extends JavaPlugin {
         //注册事件,用于阻止爆炸破坏地形
         Bukkit.getPluginManager().registerEvents(new ExplodeProtectionListener(), this);
 
+        Bukkit.getPluginManager().registerEvents(new GUIListener(),this);
 
-        binGui = new BinGui();
     }
 
     /**
