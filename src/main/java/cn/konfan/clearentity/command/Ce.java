@@ -67,12 +67,18 @@ public class Ce implements TabExecutor {
                 this.search(sender, args);
                 break;
             case "egg":
-                sender.sendMessage("_Godson");
+                sender.sendMessage("_Godson:恭喜你发现了彩蛋,可惜没什么用哦~");
                 break;
             case "open":
                 if (sender instanceof Player) {
+                    if (!Utils.getConfig().getBoolean("Bin.Enable")){
+                        sender.sendMessage(Utils.getMessage("notEnable"));
+                        break;
+                    }
                     PageGui pageGui = new PageGui();
                     pageGui.openGUI((Player) sender);
+                } else {
+                    sender.sendMessage(Utils.getMessage("commandNotConsoleRun"));
                 }
                 break;
             case "c":
@@ -124,10 +130,6 @@ public class Ce implements TabExecutor {
 
 
     }
-
-
-
-
 
 
     /**

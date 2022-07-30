@@ -1,9 +1,9 @@
 package cn.konfan.clearentity.gui;
 
 import cn.konfan.clearentity.utils.ItemStackFactory;
+import cn.konfan.clearentity.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,11 +12,16 @@ import java.util.*;
 public class BinGui {
     public static List<Inventory> inventoryList = new ArrayList<>();
     public static Map<UUID, PageGui> pageGuiMap = new HashMap<>();
+    private static boolean clear = false;
 
     static {
+        init();
+    }
+
+    private static void init() {
         //初始化箱子
-        for (int i = 0; i < 4; i++) {
-            inventoryList.add(Bukkit.createInventory(null, 6 * 9, "公共垃圾箱" + " - " + (i + 1) + " 页"));
+        for (int i = 0; i < Utils.getConfig().getInt("Bin.Page"); i++) {
+            inventoryList.add(Bukkit.createInventory(null, 6 * 9, Utils.getMessage("binName", true) + " - " + (i + 1) + Utils.getMessage("page", true)));
         }
 
         //版本兼容
@@ -25,7 +30,7 @@ public class BinGui {
         if (pane == null) {
             itemStack = new ItemStackFactory(Material.GRAY_STAINED_GLASS_PANE).toItemStack();
         } else {
-            itemStack = new ItemStack(pane, 0, (short) 0, (byte) 8);
+            itemStack = new ItemStackFactory(pane).toItemStack();
         }
         for (Inventory itemStacks : inventoryList) {
             //站位
@@ -33,41 +38,39 @@ public class BinGui {
                 itemStacks.setItem(i, itemStack);
             }
             //翻页按钮
-            itemStacks.setItem(46, new ItemStackFactory(Material.PAPER).setDisplayName("上一页").toItemStack());
-            itemStacks.setItem(52, new ItemStackFactory(Material.PAPER).setDisplayName("下一页").toItemStack());
+            itemStacks.setItem(46, new ItemStackFactory(Material.PAPER).setDisplayName(Utils.getMessage("previousPage", true)).toItemStack());
+            itemStacks.setItem(52, new ItemStackFactory(Material.PAPER).setDisplayName(Utils.getMessage("nextPage", true)).toItemStack());
+
         }
     }
-
-    public static void setItem(int page, int slot, ItemStack itemStack) {
-        inventoryList.get(page).setItem(slot, itemStack);
-    }
-
 
     public static void addItem(ItemStack itemStack) {
-        for (Inventory itemStacks : inventoryList) {
-            HashMap<Integer, ItemStack> item = itemStacks.addItem(itemStack);
+        //重新初始化Gui
+        if (clear) {
+            clear = false;
+            closeAllGui();
+            inventoryList.clear();
+            init();
+        }
+        for (int i = 0; i < inventoryList.size(); i++) {
+            HashMap<Integer, ItemStack> item = inventoryList.get(i).addItem(itemStack);
             if (item.isEmpty()) break;
+            if (i == (inventoryList.size() - 1)) {
+                clear = true;
+            }
         }
-
     }
 
-    public static ItemStack getItem(int page, int slot) {
-        return inventoryList.get(page).getItem(slot);
-    }
-
-    public static void removeItem(int page, int slot) {
-        ItemStack item = inventoryList.get(page).getItem(slot);
-        if (item == null) {
-            return;
+    public static void closeAllGui() {
+        Set<UUID> uuids = pageGuiMap.keySet();
+        for (UUID uuid : uuids) {
+            try {
+                Objects.requireNonNull(Bukkit.getPlayer(uuid)).closeInventory();
+            } catch (NullPointerException ignore) {
+                //
+            }
         }
-        removeItem(page, item);
+        pageGuiMap.clear();
     }
 
-    public static void removeItem(int page, ItemStack itemStack) {
-        inventoryList.get(page).remove(itemStack);
-    }
-
-    public void openGUI(Player player) {
-
-    }
 }

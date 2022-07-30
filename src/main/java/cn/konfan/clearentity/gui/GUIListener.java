@@ -1,6 +1,7 @@
 package cn.konfan.clearentity.gui;
 
 import cn.konfan.clearentity.ClearEntity;
+import cn.konfan.clearentity.utils.Utils;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,7 +15,7 @@ public class GUIListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (!event.getView().getTitle().contains("公共垃圾箱")) return;
+        if (!event.getView().getTitle().contains(Utils.getMessage("binName", true).replaceAll("§", "&"))) return;
         if (event.getSlot() == -999) return;
         Player player = (Player) event.getWhoClicked();
         if (event.getClickedInventory().equals(player.getInventory())) return;
@@ -26,6 +27,8 @@ public class GUIListener implements Listener {
             if (pageGui.hasPreviousPage()) {
                 pageGui.goPreviousPage();
                 pageGui.openGUI(player);
+            }else {
+                player.sendMessage(Utils.getMessage("noPreviousPage"));
             }
             return;
         }
@@ -35,13 +38,15 @@ public class GUIListener implements Listener {
             if (pageGui.hasNextPage()) {
                 pageGui.goNextPage();
                 pageGui.openGUI(player);
+            }else {
+                player.sendMessage(Utils.getMessage("noNextPage"));
             }
         }
     }
 
     @EventHandler
     public void disableGui(InventoryCloseEvent event) {
-        if (!event.getView().getTitle().contains("公共垃圾箱")) return;
+        if (!event.getView().getTitle().contains(Utils.getMessage("binName", true).replaceAll("§", "&"))) return;
         Player player = (Player) event.getPlayer();
         BinGui.pageGuiMap.remove(player.getUniqueId());
     }

@@ -44,18 +44,7 @@ public final class ClearEntity extends JavaPlugin {
         Bukkit.getScheduler().cancelTask(clearTask);
 
         //关闭所有玩家的GUI
-        Set<UUID> uuids = BinGui.pageGuiMap.keySet();
-        for (UUID uuid : uuids) {
-            try {
-                Objects.requireNonNull(Bukkit.getPlayer(uuid)).closeInventory();
-            }catch (NullPointerException ignore){
-                //
-            }
-        }
-        BinGui.pageGuiMap.clear();
-
-
-
+        BinGui.closeAllGui();
     }
 
     /**

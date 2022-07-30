@@ -11,6 +11,13 @@ clickTpChunk: "点击送到该区块"
 showFormat: "&b%CSYS% &e共有: &b%COUNT% &e个实体"
 noSearchChunk: "&c没有符合条件的区块哦~"
 searchChunk: "&e找到了 &b %COUNT% &e个符合条件的区块!"
+notEnable: "&e服务器未启用垃圾箱功能!"
+binName: "&e&l公共垃圾箱"
+page: "页"
+previousPage: "上一页"
+noPreviousPage: "&e已经没有上一页啦!"
+nextPage: "下一页"
+noNextPage: "&e已经没有下一页啦!"
 reload: "&e配置文件重载成功!"
 help: |-
   - §a[ClearEntity] §e帮助-------------------#
