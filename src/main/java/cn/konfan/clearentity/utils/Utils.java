@@ -49,11 +49,11 @@ public class Utils {
 
 
     public static String getMessage(String path, boolean notPrefix) {
-        return !notPrefix ? messagesConfig.getString("prefix") + getColorText(messagesConfig.getString(path)) : getMessage(path);
+        return !notPrefix ? getColorText(messagesConfig.getString("prefix")) + getColorText(messagesConfig.getString(path)) : getColorText(messagesConfig.getString(path));
     }
 
     public static String getMessage(String path) {
-        return messagesConfig.getString("prefix") + getColorText(messagesConfig.getString(path));
+        return getColorText(messagesConfig.getString("prefix"))+ getColorText(messagesConfig.getString(path));
     }
 
     /**

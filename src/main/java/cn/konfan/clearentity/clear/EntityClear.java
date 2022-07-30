@@ -147,6 +147,9 @@ public class EntityClear implements Runnable {
     @Override
     public void run() {
         int num = 0;
+        if (BinGui.clear) {
+            BinGui.init();
+        }
         for (World world : Bukkit.getWorlds()) {
 
             for (Entity entity : world.getEntities()) {
@@ -154,10 +157,13 @@ public class EntityClear implements Runnable {
                 boolean rules = getRules(entity);
                 if (rules) {
                     entity.remove();
-                    if (entity.isDead()){
-                        if (entity instanceof Item){
-                            System.out.println(((Item) entity).getItemStack().getType());
-                            BinGui.addItem(((Item) entity).getItemStack());
+                    if (entity.isDead()) {
+                        if (entity instanceof Item & Utils.getConfig().getBoolean("Bin.Enable")) {
+                            boolean b = BinGui.addItem(((Item) entity).getItemStack());
+                            if (!b) {
+                                BinGui.clear = true;
+                            }
+
                         }
                         num++;
                     }
@@ -176,6 +182,9 @@ public class EntityClear implements Runnable {
         }
 
         Bukkit.getServer().broadcastMessage(Utils.getColorText(Utils.getConfig().getString("Message.Clear").replaceAll("%COUNT%", "" + num)));
+        if (BinGui.clear){
+            Bukkit.getServer().broadcastMessage(Utils.getMessage("binClear"));
+        }
 
     }
 

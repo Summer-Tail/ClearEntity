@@ -5,6 +5,10 @@ import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.clear.EntityClear;
 import cn.konfan.clearentity.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 
 import java.util.ArrayList;
 import java.util.List;

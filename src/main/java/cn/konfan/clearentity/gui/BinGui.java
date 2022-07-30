@@ -12,13 +12,16 @@ import java.util.*;
 public class BinGui {
     public static List<Inventory> inventoryList = new ArrayList<>();
     public static Map<UUID, PageGui> pageGuiMap = new HashMap<>();
-    private static boolean clear = false;
+    public static boolean clear = false;
 
     static {
         init();
     }
 
-    private static void init() {
+    public static void init() {
+        clear = false;
+        closeAllGui();
+        inventoryList.clear();
         //初始化箱子
         for (int i = 0; i < Utils.getConfig().getInt("Bin.Page"); i++) {
             inventoryList.add(Bukkit.createInventory(null, 6 * 9, Utils.getMessage("binName", true) + " - " + (i + 1) + Utils.getMessage("page", true)));
@@ -44,21 +47,12 @@ public class BinGui {
         }
     }
 
-    public static void addItem(ItemStack itemStack) {
-        //重新初始化Gui
-        if (clear) {
-            clear = false;
-            closeAllGui();
-            inventoryList.clear();
-            init();
-        }
+    public static boolean addItem(ItemStack itemStack) {
         for (int i = 0; i < inventoryList.size(); i++) {
             HashMap<Integer, ItemStack> item = inventoryList.get(i).addItem(itemStack);
-            if (item.isEmpty()) break;
-            if (i == (inventoryList.size() - 1)) {
-                clear = true;
-            }
+            if (item.isEmpty()) return true;
         }
+        return false;
     }
 
     public static void closeAllGui() {

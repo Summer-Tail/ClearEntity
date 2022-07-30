@@ -1,21 +1,18 @@
 package cn.konfan.clearentity.gui;
 
-import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.utils.Utils;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import sun.jvm.hotspot.debugger.Page;
 
 public class GUIListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (!event.getView().getTitle().contains(Utils.getMessage("binName", true).replaceAll("§", "&"))) return;
+        if (!event.getView().getTitle().contains(Utils.getMessage("binName", true).replaceAll("&", "§"))) return;
         if (event.getSlot() == -999) return;
         Player player = (Player) event.getWhoClicked();
         if (event.getClickedInventory().equals(player.getInventory())) return;
@@ -46,7 +43,7 @@ public class GUIListener implements Listener {
 
     @EventHandler
     public void disableGui(InventoryCloseEvent event) {
-        if (!event.getView().getTitle().contains(Utils.getMessage("binName", true).replaceAll("§", "&"))) return;
+        if (!event.getView().getTitle().contains(Utils.getMessage("binName", true).replaceAll("&", "§"))) return;
         Player player = (Player) event.getPlayer();
         BinGui.pageGuiMap.remove(player.getUniqueId());
     }
