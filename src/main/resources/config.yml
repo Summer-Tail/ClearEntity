@@ -2,11 +2,14 @@ Clear:
   #(-1关闭)
   #低于 400 个实体不会执行清理任务
   Min: 400
-  #大于 2000 个实体立即进行一次清理
-  Max: 2000
+  #大于 2000 个实体立即进行一次清理 (模组服务器不建议开启)
+  Max: -1
 
+#垃圾箱
 Bin:
+  #开启
   Enable: true
+  #垃圾箱页数
   Page: 4
 
 #清理周期 (秒)
@@ -27,8 +30,8 @@ Message:
 Rules:
   #模组实体不按照 [动物] 与 [怪物] 进行统一处理
   Mode: true
-  #清理命名的生物
-  Nam: false
+  #清理命名的生物(模组服务器必须为ture)
+  Nam: true
   #黑名单
   Black:
     #怪物
@@ -41,19 +44,19 @@ Rules:
     - "animals"
 
   ItemWhite:
-    #起什么名字都行
-    #钻石镐:
-      #id: "diamond_pickaxeid"
-      #最后一个字符为*开启模糊匹配
-      #name: "不被清理*"
-      #lore: "不被清理"
+  #起什么名字都行
+  #钻石镐:
+  #id: "diamond_pickaxeid"
+  #最后一个字符为*开启模糊匹配
+  #name: "不被清理*"
+  #lore: "不被清理"
 
   #单独设置某个世界的规则
   World:
-    #世界名
-    #world:
-      #Black:
-      #White:
+  #世界名
+  #world:
+  #Black:
+  #White:
 
 #禁止某些实体的生成(禁止幻翼请直接使用命令:D)
 EntityBlack:
