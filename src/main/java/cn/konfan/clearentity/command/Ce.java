@@ -80,7 +80,7 @@ public class Ce implements TabExecutor {
                 sender.sendMessage("_Godson");
                 break;
             case "open":
-                if (sender instanceof  Player){
+                if (sender instanceof Player) {
                     PageGui pageGui = new PageGui();
                     pageGui.openGUI((Player) sender);
                 }
@@ -150,7 +150,7 @@ public class Ce implements TabExecutor {
 
             for (String s : map.keySet()) {
                 net.md_5.bungee.api.chat.BaseComponent url = new TextComponent("- §b" + s + " §e" + map.get(s));
-                url.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(Utils.getColorText(Utils.getMessagesConfig().getString("newJsonTextClick")))));
+                url.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(Utils.getColorText(Utils.getMessage("newJsonTextClick", true)))));
                 url.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "  - '" + s + "'"));
                 sender.spigot().sendMessage(url);
             }
@@ -162,7 +162,7 @@ public class Ce implements TabExecutor {
             for (String s : map.keySet()) {
                 BaseComponent url = new TextComponent("- §b" + s + " §e" + map.get(s));
                 url.setHoverEvent(new HoverEvent
-                        (HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Utils.getColorText(Utils.getMessagesConfig().getString("oldJsonTextClick")))}));
+                        (HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Utils.getColorText(Utils.getMessage("oldJsonTextClick", true)))}));
                 url.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "  - '" + s + "'"));
                 sender.spigot().sendMessage(url);
             }
@@ -219,9 +219,9 @@ public class Ce implements TabExecutor {
             num++;
 
             HoverEvent hoverEvent = new HoverEvent
-                    (HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Utils.getColorText(Utils.getMessagesConfig().getString("clickTpChunk")))});
+                    (HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Utils.getColorText(Utils.getMessage("clickTpChunk", true)))});
             ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + loadedChunk.getX() * 16 + " " + player.getLocation().getY() + " " + loadedChunk.getZ() * 16);
-            player.spigot().sendMessage(Utils.jsonText(Utils.getColorText(Utils.getMessagesConfig().getString("showFormat").replaceAll("%CSYS%", "[X:" + loadedChunk.getX() + ",Z:" + loadedChunk.getZ() + "]").replaceAll("%COUNT%", loadedChunk.getEntities().length + "")), hoverEvent, clickEvent));
+            player.spigot().sendMessage(Utils.jsonText(Utils.getColorText(Utils.getMessage("showFormat", true).replaceAll("%CSYS%", "[X:" + loadedChunk.getX() + ",Z:" + loadedChunk.getZ() + "]").replaceAll("%COUNT%", loadedChunk.getEntities().length + "")), hoverEvent, clickEvent));
 
         }
 
@@ -267,9 +267,9 @@ public class Ce implements TabExecutor {
             }
             showNum++;
             HoverEvent hoverEvent = new HoverEvent
-                    (HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Utils.getColorText(Utils.getMessagesConfig().getString("clickTpChunk")))});
+                    (HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Utils.getColorText(Utils.getMessage("clickTpChunk", true)))});
             ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + chunk.getX() * 16 + " " + player.getLocation().getY() + " " + chunk.getZ() * 16);
-            player.spigot().sendMessage(Utils.jsonText(Utils.getColorText(Utils.getMessagesConfig().getString("showFormat").replaceAll("%CSYS%", "[X:" + chunk.getX() + ",Z:" + chunk.getZ() + "]").replaceAll("%COUNT%", map.get(chunk) + "")), hoverEvent, clickEvent));
+            player.spigot().sendMessage(Utils.jsonText(Utils.getColorText(Utils.getMessage("showFormat", true).replaceAll("%CSYS%", "[X:" + chunk.getX() + ",Z:" + chunk.getZ() + "]").replaceAll("%COUNT%", map.get(chunk) + "")), hoverEvent, clickEvent));
         }
 
         if (showNum == 0) {
@@ -305,6 +305,6 @@ public class Ce implements TabExecutor {
 //        sender.sendMessage("- §e重新载入配置文件");
 //        sender.sendMessage("- §e#------------------------------------#");
 //        sender.sendMessage("- §a命令简写模式: /ce");
-        sender.sendMessage(Utils.getColorText(Utils.getMessagesConfig().getString("help")));
+        sender.sendMessage(Utils.getColorText(Utils.getMessage("help", true)));
     }
 }

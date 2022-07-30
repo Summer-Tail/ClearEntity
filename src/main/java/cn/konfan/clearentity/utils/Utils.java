@@ -28,10 +28,6 @@ public class Utils {
     }
 
 
-    public static YamlConfiguration getMessagesConfig() {
-        return messagesConfig;
-    }
-
     /**
      * 将 文本 中颜色字符从 & 转换为 §
      *
@@ -51,8 +47,13 @@ public class Utils {
         return ClearEntity.plugin.getConfig();
     }
 
+
+    public static String getMessage(String path, boolean notPrefix) {
+        return !notPrefix ? messagesConfig.getString("prefix") + getColorText(messagesConfig.getString(path)) : getMessage(path);
+    }
+
     public static String getMessage(String path) {
-        return getColorText(messagesConfig.getString("prefix") + messagesConfig.getString(path));
+        return messagesConfig.getString("prefix") + getColorText(messagesConfig.getString(path));
     }
 
     /**
