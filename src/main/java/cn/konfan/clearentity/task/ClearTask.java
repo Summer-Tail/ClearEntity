@@ -3,6 +3,7 @@ package cn.konfan.clearentity.task;
 
 import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.clear.EntityClear;
+import cn.konfan.clearentity.utils.BossBarUtils;
 import cn.konfan.clearentity.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -46,6 +47,7 @@ public class ClearTask implements Runnable {
         //重新排序,便于读取
         List<Integer> timeList = new ArrayList<>(new TreeSet<Integer>(Utils.getConfig().getIntegerList("Message.Time")));
 
+
         //发送提示
         for (int i = timeList.size() - 1; i >= 0; i--) {
 
@@ -55,9 +57,10 @@ public class ClearTask implements Runnable {
                     new Thread(() -> Bukkit.getServer().broadcastMessage(Utils.getColorText(Utils.getConfig().getString("Message.Before").replaceAll("%TIME%", "" + timeList.get(finalI))))), time * 20L);
         }
 
+
         //执行清理
         Bukkit.getScheduler().scheduleSyncDelayedTask(ClearEntity.plugin, new EntityClear(), timeList.get(timeList.size() - 1) * 20L);
-
+        new BossBarUtils().sendBossBar(Utils.getColorText(""), BarColor.RED, BarStyle.SOLID, timeList.get(timeList.size() - 1) + 1);
         //停止当前Task 并重新启动一个
         Bukkit.getScheduler().cancelTask(ClearEntity.clearTask);
         ClearEntity.clearTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(ClearEntity.plugin, new ClearTask(), timeList.get(timeList.size() - 1), 20);

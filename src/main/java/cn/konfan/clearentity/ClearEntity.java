@@ -74,7 +74,7 @@ public final class ClearEntity extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
         //注册事件,用于阻止爆炸破坏地形
         Bukkit.getPluginManager().registerEvents(new ExplodeProtectionListener(), this);
-
+        //垃圾桶监听事件
         Bukkit.getPluginManager().registerEvents(new GUIListener(),this);
 
     }

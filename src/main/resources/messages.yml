@@ -19,6 +19,7 @@ previousPage: "上一页"
 noPreviousPage: "&e已经没有上一页啦!"
 nextPage: "下一页"
 noNextPage: "&e已经没有下一页啦!"
+BossBar: "&a扫地娘预计还有 &b %COUNT% &a秒后到达战场"
 reload: "&e配置文件重载成功!"
 help: |-
   - §a[ClearEntity] §e帮助-------------------#
