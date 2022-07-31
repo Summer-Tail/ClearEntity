@@ -17,28 +17,37 @@ import java.util.*;
 public class Ce implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) {
-            return Arrays.asList("list", "search", "clear", "reload");
-        }
-        if (args.length == 2 && "list".equalsIgnoreCase(args[0])) {
-            return Arrays.asList("mode", "monster", "animals");
-        }
-        if (args.length == 2 && "search".equalsIgnoreCase(args[0])) {
-            return Arrays.asList("chunk", "entity");
-        }
-        if (args.length == 3 && "chunk".equalsIgnoreCase(args[1])) {
-            return Arrays.asList("10", "100", "1000");
-        }
-        if (args.length == 3 && "entity".equalsIgnoreCase(args[1])) {
-            if (!(sender instanceof Player)) {
-                return null;
+
+        if (!sender.isPermissionSet("ClearEntity.admin")) {
+            if (args.length == 1) {
+                return Arrays.asList("list", "search", "clear", "reload");
             }
-            List<String> list = new ArrayList<>();
-            for (Entity entity : ((Player) sender).getWorld().getEntities()) {
-                list.add(Utils.getSaveID(entity));
+            if (args.length == 2 && "list".equalsIgnoreCase(args[0])) {
+                return Arrays.asList("mode", "monster", "animals");
             }
-            return list;
+            if (args.length == 2 && "search".equalsIgnoreCase(args[0])) {
+                return Arrays.asList("chunk", "entity");
+            }
+            if (args.length == 3 && "chunk".equalsIgnoreCase(args[1])) {
+                return Arrays.asList("10", "100", "1000");
+            }
+            if (args.length == 3 && "entity".equalsIgnoreCase(args[1])) {
+                if (!(sender instanceof Player)) {
+                    return null;
+                }
+                List<String> list = new ArrayList<>();
+                for (Entity entity : ((Player) sender).getWorld().getEntities()) {
+                    list.add(Utils.getSaveID(entity));
+                }
+                return list;
+            }
         }
+
+
+        if (sender.isPermissionSet("ClearEntity.open")) {
+            return Collections.singletonList("open");
+        }
+
         return null;
     }
 
@@ -49,7 +58,7 @@ public class Ce implements TabExecutor {
             return false;
         }
 
-        if (!sender.isPermissionSet("ClearEntity.admin") && !"egg".equals(args[0])) {
+        if (!sender.isPermissionSet("ClearEntity.admin") && !"egg".equals(args[0]) && !"open".equals(args[0])) {
             return true;
         }
 
@@ -70,16 +79,16 @@ public class Ce implements TabExecutor {
                 sender.sendMessage("_Godson:恭喜你发现了彩蛋,可惜没什么用哦~");
                 break;
             case "open":
-                if (sender instanceof Player) {
-                    if (!Utils.getConfig().getBoolean("Bin.Enable")){
-                        sender.sendMessage(Utils.getMessage("notEnable"));
-                        break;
+                    if (sender instanceof Player) {
+                        if (!Utils.getConfig().getBoolean("Bin.Enable")) {
+                            sender.sendMessage(Utils.getMessage("notEnable"));
+                            break;
+                        }
+                        PageGui pageGui = new PageGui();
+                        pageGui.openGUI((Player) sender);
+                    } else {
+                        sender.sendMessage(Utils.getMessage("commandNotConsoleRun"));
                     }
-                    PageGui pageGui = new PageGui();
-                    pageGui.openGUI((Player) sender);
-                } else {
-                    sender.sendMessage(Utils.getMessage("commandNotConsoleRun"));
-                }
                 break;
             case "c":
                 new EntityClear().run();

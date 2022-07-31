@@ -2,12 +2,14 @@ package cn.konfan.clearentity.clear;
 
 import cn.konfan.clearentity.gui.BinGui;
 import cn.konfan.clearentity.utils.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -63,32 +65,26 @@ public class EntityClear implements Runnable {
                     String lore = Utils.getConfig().getString("Rules.ItemWhite." + key + ".lore");
 
                     //id处理
-                    if (id != null && !id.equalsIgnoreCase(((Item) entity).getItemStack().getType().name())) {
-                        return true;
+                    if (!StringUtils.isBlank(id)){
+                        if (!id.equalsIgnoreCase(((Item) entity).getItemStack().getType().name()))return true;
                     }
 
                     //name处理
-                    if (name != null && !Utils.like(name, ((Item) entity).getItemStack().getItemMeta().getDisplayName())) {
-                        return true;
+                    if (!StringUtils.isBlank(name)){
+                        if (!Utils.like(name, Objects.requireNonNull(((Item) entity).getItemStack().getItemMeta()).getDisplayName()))return true;
                     }
 
-
-                    if (lore != null) {
-                        return false;
-                    }
-
-                    List<String> itemLore = ((Item) entity).getItemStack().getItemMeta().getLore();
-                    if (itemLore == null) {
-                        return true;
-                    }
-
-
-                    for (String s : itemLore) {
-                        if (!Utils.like(lore, s)) {
+                    if (!StringUtils.isBlank(lore)){
+                        List<String> itemLore = Objects.requireNonNull(((Item) entity).getItemStack().getItemMeta()).getLore();
+                        if (itemLore == null) {
                             return true;
                         }
-                    }
 
+
+                        for (String s : itemLore) {
+                            if (!Utils.like(lore, s))return true;
+                        }
+                    }
                     return false;
                 }
             } catch (NullPointerException ignore) {
@@ -171,6 +167,7 @@ public class EntityClear implements Runnable {
                 }
 
                 String debug = Utils.getConfig().getString("Debug");
+
                 if (debug != null) {
                     if (debug.equals(saveID)) {
                         System.out.println("[DEBUG]: " + saveID + "[" + rules + "]");
