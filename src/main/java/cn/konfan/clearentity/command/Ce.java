@@ -77,7 +77,6 @@ public class Ce implements TabExecutor {
                 break;
             case "egg":
                 sender.sendMessage("_Godson:恭喜你发现了彩蛋,可惜没什么用哦~");
-                break;
             case "open":
                     if (sender instanceof Player) {
                         if (!Utils.getConfig().getBoolean("Bin.Enable")) {
@@ -89,9 +88,6 @@ public class Ce implements TabExecutor {
                     } else {
                         sender.sendMessage(Utils.getMessage("commandNotConsoleRun"));
                     }
-                break;
-            case "c":
-                new EntityClear().run();
                 break;
             default:
                 this.help(sender);

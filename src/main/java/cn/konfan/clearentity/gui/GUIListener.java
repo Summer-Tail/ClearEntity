@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GUIListener implements Listener {
 
@@ -46,5 +47,10 @@ public class GUIListener implements Listener {
         if (!event.getView().getTitle().contains(Utils.getMessage("binName", true).replaceAll("&", "§"))) return;
         Player player = (Player) event.getPlayer();
         BinGui.pageGuiMap.remove(player.getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event){
+        BinGui.pageGuiMap.remove(event.getPlayer().getUniqueId());
     }
 }

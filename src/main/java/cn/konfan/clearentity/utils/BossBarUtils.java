@@ -1,3 +1,7 @@
+/**
+ * NeverLagReborn - Kotori0629, MrLv0816
+ * Copyright (C) 2022-2022.
+ */
 package cn.konfan.clearentity.utils;
 
 import cn.konfan.clearentity.ClearEntity;
@@ -13,17 +17,16 @@ public class BossBarUtils implements Runnable {
     private double time;
     private int seconds;
 
-    public BossBar sendBossBar(String title, BarColor barColor, BarStyle style, int time) {
+    public void sendBossBar(String title, BarColor barColor, BarStyle style, int time) {
         bossBar = Bukkit.createBossBar(title, barColor, style);
         bossBar.setProgress(1.00);
         seconds = time;
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             bossBar.addPlayer(onlinePlayer);
         }
-        this.repeat(time, 20, this, bossBar::removeAll);
-        this.time = (Double.parseDouble(time + "") / 100) * 0.01;
+        this.repeat(time, this, bossBar::removeAll);
+        this.time = (100D / Double.parseDouble(time + "")) * 0.01;
 
-        return bossBar;
     }
 
 
@@ -32,11 +35,12 @@ public class BossBarUtils implements Runnable {
         seconds--;
         double progress = bossBar.getProgress();
         bossBar.setProgress(progress >= time ? progress - time : 0);
-        bossBar.setTitle(Utils.getColorText(Utils.getMessage("BossBar").replaceAll("%COUNT%", seconds + "")));
+        bossBar.setTitle(Utils.getMessage("BossBar", true).replaceAll("%COUNT%", "" + seconds));
+
     }
 
 
-    private void repeat(int repetitions, long interval, Runnable task, Runnable onComplete) {
+    private void repeat(int repetitions, Runnable task, Runnable onComplete) {
         new BukkitRunnable() {
             private int index;
 
@@ -55,6 +59,6 @@ public class BossBarUtils implements Runnable {
 
                 task.run();
             }
-        }.runTaskTimer(ClearEntity.plugin, 0L, interval);
+        }.runTaskTimer(ClearEntity.plugin, 0L, 20);
     }
 }

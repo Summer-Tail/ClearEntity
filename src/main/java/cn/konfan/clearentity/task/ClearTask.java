@@ -60,7 +60,10 @@ public class ClearTask implements Runnable {
 
         //执行清理
         Bukkit.getScheduler().scheduleSyncDelayedTask(ClearEntity.plugin, new EntityClear(), timeList.get(timeList.size() - 1) * 20L);
-        new BossBarUtils().sendBossBar(Utils.getColorText(""), BarColor.RED, BarStyle.SOLID, timeList.get(timeList.size() - 1) + 1);
+        if (ClearEntity.plugin.getConfig().getBoolean("Message.BossBar")){
+            new BossBarUtils().sendBossBar(Utils.getColorText(""), BarColor.RED, BarStyle.SOLID, timeList.get(timeList.size() - 1) + 1);
+        }
+
         //停止当前Task 并重新启动一个
         Bukkit.getScheduler().cancelTask(ClearEntity.clearTask);
         ClearEntity.clearTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(ClearEntity.plugin, new ClearTask(), timeList.get(timeList.size() - 1), 20);

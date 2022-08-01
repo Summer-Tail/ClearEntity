@@ -65,16 +65,17 @@ public class EntityClear implements Runnable {
                     String lore = Utils.getConfig().getString("Rules.ItemWhite." + key + ".lore");
 
                     //id处理
-                    if (!StringUtils.isBlank(id)){
-                        if (!id.equalsIgnoreCase(((Item) entity).getItemStack().getType().name()))return true;
+                    if (!StringUtils.isBlank(id)) {
+                        if (!id.equalsIgnoreCase(((Item) entity).getItemStack().getType().name())) return true;
                     }
 
                     //name处理
-                    if (!StringUtils.isBlank(name)){
-                        if (!Utils.like(name, Objects.requireNonNull(((Item) entity).getItemStack().getItemMeta()).getDisplayName()))return true;
+                    if (!StringUtils.isBlank(name)) {
+                        if (!Utils.like(name, Objects.requireNonNull(((Item) entity).getItemStack().getItemMeta()).getDisplayName()))
+                            return true;
                     }
 
-                    if (!StringUtils.isBlank(lore)){
+                    if (!StringUtils.isBlank(lore)) {
                         List<String> itemLore = Objects.requireNonNull(((Item) entity).getItemStack().getItemMeta()).getLore();
                         if (itemLore == null) {
                             return true;
@@ -82,7 +83,7 @@ public class EntityClear implements Runnable {
 
 
                         for (String s : itemLore) {
-                            if (!Utils.like(lore, s))return true;
+                            if (!Utils.like(lore, s)) return true;
                         }
                     }
                     return false;
@@ -113,8 +114,6 @@ public class EntityClear implements Runnable {
         if (!saveID.startsWith("minecraft:") && Utils.getConfig().getBoolean("Rules.Mode")) {
             return false;
         }
-
-
         //============================================================================
         //白名单 动物
         if (white.contains("animals") && entity instanceof Animals) {
@@ -124,20 +123,12 @@ public class EntityClear implements Runnable {
         if (white.contains("monster") && entity instanceof Monster) {
             return false;
         }
-
         //黑名单
         if (black.contains("monster") && entity instanceof Monster) {
             return true;
         }
 
-
-        if (black.contains("animals")) {
-            return entity instanceof Animals;
-        }
-
-
-        //未知
-        return false;
+        return black.contains("animals") && entity instanceof Animals;
     }
 
     @Override
@@ -179,7 +170,7 @@ public class EntityClear implements Runnable {
         }
 
         Bukkit.getServer().broadcastMessage(Utils.getColorText(Utils.getConfig().getString("Message.Clear").replaceAll("%COUNT%", "" + num)));
-        if (BinGui.clear){
+        if (BinGui.clear) {
             Bukkit.getServer().broadcastMessage(Utils.getMessage("binClear"));
         }
 

@@ -18,6 +18,8 @@ Time: 1800
 Message:
   Before: '&b[服务器娘]&a实体和掉落物将在 &e%TIME%秒 &a后清除!'
   Clear: '&b[服务器娘]&a哎哟，这次清理了 &c%COUNT%个 &a垃圾，我感觉自己萌萌哒~'
+  #开启boss血条样式倒计时
+  BossBar: true
   Time:
     - 60
     - 30
