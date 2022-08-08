@@ -1,20 +1,56 @@
 package cn.konfan.clearentity.clear;
 
+import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.gui.BinGui;
+import cn.konfan.clearentity.utils.BossBarUtils;
 import cn.konfan.clearentity.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 
 public class EntityClear implements Runnable {
+    static FileConfiguration config = ClearEntity.plugin.getConfig();
 
+    public static void clearStart() {
+        /**
+         * Sort
+         */
+        List<Integer> sendTime = config.getIntegerList("Message.Time");
+        Collections.sort(sendTime);
+
+        /**
+         * Send beforeMessage
+         */
+        String before = Utils.getColorText(config.getString("Message.Before"));
+        int maxTime = sendTime.get(sendTime.size() - 1);
+        Bukkit.getScheduler().runTask(ClearEntity.plugin, () -> Bukkit.getServer().broadcastMessage(before.replaceAll("%TIME%", "" + maxTime)));
+        for (int i = sendTime.size() - 2; i >= 0; i--) {
+            int time = sendTime.get(i);
+            Bukkit.getScheduler().runTaskLater(ClearEntity.plugin, () -> Bukkit.getServer().broadcastMessage(before.replaceAll("%TIME%", "" + time)), (maxTime - sendTime.get(i)) * 20L);
+        }
+
+        /**
+         * Run clearEntity
+         */
+        Bukkit.getScheduler().runTaskLater(ClearEntity.plugin, new EntityClear(), sendTime.get(sendTime.size() - 1) * 20);
+
+        /**
+         * Send bossbar
+         */
+        if (!config.getBoolean("Message.BossBar")) return;
+        new BossBarUtils().sendBossBar("Title", BarColor.RED, BarStyle.SOLID, sendTime.get(sendTime.size() - 1) + 1);
+    }
 
     /**
      * 确认实体是否应该被清理
@@ -95,40 +131,45 @@ public class EntityClear implements Runnable {
             return true;
         }
 
-        //白名单
-        if (white.contains(saveID)) {
-            return false;
-        }
-
-        //黑名单
-        if (black.contains(saveID)) {
-            //判断船或矿车上是否有玩家
-            if (entity instanceof Boat || entity instanceof Minecart) {
-                return entity.getPassengers().size() == 0;
-            }
-            return true;
-        }
-
-
         //非原版实体不参与 [动物] 与 [怪物] 的分类判断
         if (!saveID.startsWith("minecraft:") && Utils.getConfig().getBoolean("Rules.Mode")) {
             return false;
         }
-        //============================================================================
-        //白名单 动物
-        if (white.contains("animals") && entity instanceof Animals) {
-            return false;
-        }
-        //白名单 怪物
-        if (white.contains("monster") && entity instanceof Monster) {
-            return false;
-        }
-        //黑名单
-        if (black.contains("monster") && entity instanceof Monster) {
-            return true;
+
+
+        if (white.size() != 0) {
+            //白名单
+            if (white.contains(saveID)) {
+                return false;
+            }
+            if (white.contains("animals") && entity instanceof Animals) {
+                return false;
+            }
+            //白名单 怪物
+            if (white.contains("monster") && entity instanceof Monster) {
+                return false;
+            }
         }
 
-        return black.contains("animals") && entity instanceof Animals;
+        if (black.size() != 0) {
+            if (black.contains(saveID)) {
+                //判断船或矿车上是否有玩家
+                if (entity instanceof Boat || entity instanceof Minecart) {
+                    return entity.getPassengers().size() == 0;
+                }
+                return true;
+            }
+
+            //黑名单
+            if (black.contains("monster") && entity instanceof Monster) {
+                return true;
+            }
+            if (black.contains("animals") && entity instanceof Animals) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

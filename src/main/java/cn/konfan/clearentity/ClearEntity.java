@@ -26,6 +26,7 @@ public final class ClearEntity extends JavaPlugin {
     public static String method;
     public static ClearEntity plugin;
     public static Integer clearTask;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -66,16 +67,17 @@ public final class ClearEntity extends JavaPlugin {
         //注册命令
         Objects.requireNonNull(Bukkit.getPluginCommand("ClearEntity")).setExecutor(new Ce());
 
+
+        //实体数量监测
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new EntityNumTask(), 0, 20 * 60);
         //清理计时
         clearTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ClearTask(), 20, 20);
-        //实体数量监测
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new EntityNumTask(), 20, 20);
         //注册事件,用于禁止实体的生成
         Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
         //注册事件,用于阻止爆炸破坏地形
         Bukkit.getPluginManager().registerEvents(new ExplodeProtectionListener(), this);
         //垃圾桶监听事件
-        Bukkit.getPluginManager().registerEvents(new GUIListener(),this);
+        Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
 
     }
 

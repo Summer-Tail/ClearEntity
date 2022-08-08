@@ -7,23 +7,32 @@ import org.bukkit.entity.Item;
 
 public class EntityNumTask implements Runnable {
 
-    public static Integer creature = 0;
-    public static Integer item = 0;
+    public static int entity = 0;
+    public static int item = 0;
+
+    /**
+     * Static init
+     */
+    static {
+        upEntityNum();
+    }
+
+    public static void upEntityNum() {
+        entity = 0;
+        item = 0;
+
+        Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity1 -> {
+            if (entity1 instanceof Item) {
+                item++;
+                return;
+            }
+            entity++;
+        }));
+
+    }
 
     @Override
     public void run() {
-        creature = 0;
-        item = 0;
-        for (World world : Bukkit.getWorlds()) {
-            for (Entity entity : world.getEntities()) {
-                if (entity instanceof Item) {
-                    item++;
-                    continue;
-                }
-                creature++;
-            }
-        }
-
-
+        upEntityNum();
     }
 }

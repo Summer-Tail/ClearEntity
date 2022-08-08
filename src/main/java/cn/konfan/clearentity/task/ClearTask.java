@@ -10,64 +10,33 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
 public class ClearTask implements Runnable {
-    private Integer time = 0;
-
+    private int time;
+    private boolean maxClear = false;
+    private final FileConfiguration config = ClearEntity.plugin.getConfig();
     @Override
     public void run() {
-        ++time;
-
-        //实体过少,不执行清理任务
-        if (Utils.getConfig().getInt("Clear.Min") > 0 && EntityNumTask.creature < Utils.getConfig().getInt("Clear.Min")) {
+        time++;
+        int min = config.getInt("Clear.Min");
+        int max = config.getInt("Clear.Max");
+        if ((EntityNumTask.entity > max) && max != -1 && !maxClear) {
+            maxClear = true;
+            EntityClear.clearStart();
             return;
         }
-
-
-        //时间判断
-        if (time >= Utils.getConfig().getInt("Time")) {
-            clearStart();
-            return;
-        }
-
-        //实体数量判断
-        if (Utils.getConfig().getInt("Clear.Max") > 0 && EntityNumTask.creature >= Utils.getConfig().getInt("Clear.Max")) {
-            clearStart();
-        }
-
-
+        if ((EntityNumTask.entity > min) && min != -1) return;
+        if (time != config.getInt("Message.Time")) return;
+        EntityClear.clearStart();
+        maxClear = false;
+        time = 0;
     }
 
-    public static void clearStart() {
-
-        //重新排序,便于读取
-        List<Integer> timeList = new ArrayList<>(new TreeSet<Integer>(Utils.getConfig().getIntegerList("Message.Time")));
-
-
-        //发送提示
-        for (int i = timeList.size() - 1; i >= 0; i--) {
-
-            int time = timeList.get(timeList.size() - 1) - timeList.get(i);
-            int finalI = i;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(ClearEntity.plugin,
-                    new Thread(() -> Bukkit.getServer().broadcastMessage(Utils.getColorText(Utils.getConfig().getString("Message.Before").replaceAll("%TIME%", "" + timeList.get(finalI))))), time * 20L);
-        }
-
-
-        //执行清理
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ClearEntity.plugin, new EntityClear(), timeList.get(timeList.size() - 1) * 20L);
-        if (ClearEntity.plugin.getConfig().getBoolean("Message.BossBar")){
-            new BossBarUtils().sendBossBar(Utils.getColorText(""), BarColor.RED, BarStyle.SOLID, timeList.get(timeList.size() - 1) + 1);
-        }
-
-        //停止当前Task 并重新启动一个
-        Bukkit.getScheduler().cancelTask(ClearEntity.clearTask);
-        ClearEntity.clearTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(ClearEntity.plugin, new ClearTask(), timeList.get(timeList.size() - 1), 20);
-    }
 
 
 }

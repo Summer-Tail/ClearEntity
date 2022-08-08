@@ -9,15 +9,18 @@ public class EntitySpawnListener implements Listener {
 
     /**
      * 禁止某些实体的生成
+     *
      * @param event 实体生成事件
      */
     @EventHandler
-    public void banEntity(EntitySpawnEvent event){
+    public void banEntity(EntitySpawnEvent event) {
+        if (Utils.getConfig().getStringList("EntityBlack").size() == 0) {
+            return;
+        }
         if (Utils.getConfig().getStringList("EntityBlack").contains(Utils.getSaveID(event.getEntity()))) {
             event.setCancelled(true);
         }
     }
-
 
 
 }

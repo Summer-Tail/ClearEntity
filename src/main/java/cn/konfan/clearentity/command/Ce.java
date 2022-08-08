@@ -101,7 +101,7 @@ public class Ce implements TabExecutor {
      * 执行一次清理
      */
     private void clear() {
-        ClearTask.clearStart();
+        EntityClear.clearStart();
     }
 
     /**
