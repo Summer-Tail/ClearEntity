@@ -63,7 +63,7 @@ public class Search {
         AtomicInteger num = new AtomicInteger();
         map.keySet().forEach(key -> {
             if (map.get(key) >= min) {
-                sender.sendMessage(ClearEntity.convertColor("&e" + key + " | " + map.get(key)));
+                sender.sendMessage(ClearEntity.convertColor("&a" + key + " &r|&b " + map.get(key)));
                 num.getAndIncrement();
             }
         });

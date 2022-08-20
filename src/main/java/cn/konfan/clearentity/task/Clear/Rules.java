@@ -13,6 +13,7 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Rules {
     static FileConfiguration config = ClearEntity.getInstance().getConfig();
@@ -49,33 +50,26 @@ public class Rules {
          */
         ConfigurationSection rules = config.getConfigurationSection("EntityManager.Rules.custom." + entity.getWorld().getName());
         rules = rules != null ? rules : config.getConfigurationSection("EntityManager.Rules");
-
-
-        /**
-         * Whitelist
-         */
+        List<String> black = rules.getStringList("blacklist");
         List<String> white = rules.getStringList("whitelist");
+
+
         if (white.contains(saveID)) {
             return false;
         }
+        if (black.contains(saveID)) {
+            return true;
+        }
+
+
         if (!config.getBoolean("EntityManager.Rules.mode") || saveID.startsWith("minecraft:")) {
             if ((white.contains("animals") && entity instanceof Animals) || white.contains("monster") && entity instanceof Monster) {
                 System.out.println(saveID);
                 return false;
             }
         }
-
-        /**
-         * Blacklist
-         */
-        List<String> black = rules.getStringList("blacklist");
-        if (black.contains(saveID)) {
-            return true;
-        }
         if (!config.getBoolean("EntityManager.Rules.mode") || saveID.startsWith("minecraft:")) {
-            if ((black.contains("monster") && entity instanceof Monster) || (black.contains("animals") && entity instanceof Animals)) {
-                return true;
-            }
+            return (black.contains("monster") && entity instanceof Monster) || (black.contains("animals") && entity instanceof Animals);
         }
 
 
@@ -89,48 +83,68 @@ public class Rules {
         config = ClearEntity.getInstance().getConfig();
 
         ItemStack itemStack = ((Item) item).getItemStack();
-        String itemName = itemStack.getItemMeta().getDisplayName();
+        String itemName = Objects.requireNonNull(itemStack.getItemMeta()).getDisplayName();
         List<String> itemLore = itemStack.getItemMeta().getLore();
         String itemID = NMSUtils.getItemID(itemStack);
 
 
-        ConfigurationSection section = config.getConfigurationSection("EntityManager.Rules.custom." + item.getWorld().getName());
-        ConfigurationSection itemConfig = config.getConfigurationSection("EntityManager.Rules.item");
-        itemConfig = section == null ? itemConfig : section;
+        ConfigurationSection section = config.getConfigurationSection("EntityManager.Rules.custom." + item.getWorld().getName() + ".item");
+        ConfigurationSection itemConfig = section == null ? config.getConfigurationSection("EntityManager.Rules.item") : section;
+
+        if (!itemConfig.getBoolean("enable")) {
+            return false;
+        }
+
+        boolean idRules = true;
+        boolean nameRules = true;
+        boolean loreRules = true;
 
         for (String key : itemConfig.getKeys(false)) {
             if ("enable".equals(key)) continue;
-
             String id = itemConfig.getString(key + ".id");
             String name = itemConfig.getString(key + ".name");
             String lore = itemConfig.getString(key + ".lore");
 
-            if (StringUtils.isNotEmpty(id) && id.equals(itemID)) {
+            /**
+             * Null if
+             */
+            if (StringUtils.isNotEmpty(lore) && itemLore == null) {
                 return false;
             }
 
-            if (StringUtils.isNotEmpty(name)) {
-                if (name.startsWith("*")) {
-                    if (name.contains(itemName)) return false;
-                } else {
-                    if (name.equals(itemName)) return false;
-                }
+            if (StringUtils.isNotEmpty(name) && StringUtils.isEmpty(itemName)) {
+                return false;
             }
 
+
+            /**
+             * id判断
+             */
+            if (StringUtils.isNotEmpty(id)) {
+                idRules = id.equals(itemID);
+            }
+
+            /**
+             * 名字判断
+             */
+            if (StringUtils.isNotEmpty(name)) {
+                nameRules = itemName.startsWith("*") ? name.contains(itemName) : name.equals(itemName);
+            }
+
+            /**
+             * 描述判断
+             */
             if (StringUtils.isNotEmpty(lore)) {
                 for (String s : itemLore) {
-                    if (lore.startsWith("*")) {
-                        if (lore.contains(s)) return false;
-                    } else {
-                        if (lore.equals(s)) return false;
+
+                    loreRules = s.startsWith("*") ? lore.contains(itemName) : lore.equals(itemName);
+
+                    if (idRules && nameRules && loreRules) {
+                        return false;
                     }
                 }
             }
-
-
         }
-
-
-        return true;
+        return !idRules && !nameRules && !loreRules;
     }
 }

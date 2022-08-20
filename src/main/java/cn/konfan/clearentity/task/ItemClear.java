@@ -41,9 +41,14 @@ public class ItemClear implements Runnable {
              */
             boolean itemRules = Rules.getItemRules(entity);
 
-            if (itemRules) entity.remove();
+            if (itemRules){
+                entity.remove();
+                num.getAndIncrement();
+            }else {
+                return;
+            }
 
-            num.getAndIncrement();
+
 
 
             /**

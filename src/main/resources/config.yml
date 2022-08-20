@@ -47,9 +47,9 @@ EntityManager:
       #清理掉落物
       enable: true
       #钻石镐:                     #节点名(随意)
-        #id: "diamond_pickaxeid"   #物品id
-        #name: "钻石制成"           #物品名
-        #lore: "不被清理"           #描述
+        #id: "minecraft:diamond_pickaxe"   #物品id
+        #name: "钻石制成"                   #物品名
+        #lore: "不被清理"                   #描述
         #name/lore 开头为*则开启模糊匹配 如： name: "*不被清理"
 
     #针对某个世界单独进行规则处理

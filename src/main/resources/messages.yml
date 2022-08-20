@@ -16,7 +16,7 @@ Other:
   prefix: "&b[服务器娘]"
   reload: "%prefix% &e配置文件重载成功！"
   notConsole: "%prefix% &c此命令无法在控制台执行！"
-  parmError: "%prefix% &c参数错误!"
+  paramError: "%prefix% &c参数错误!"
 
 
 

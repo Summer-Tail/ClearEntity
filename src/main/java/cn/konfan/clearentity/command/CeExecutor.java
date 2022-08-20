@@ -5,12 +5,13 @@ import cn.konfan.clearentity.command.search.Search;
 import cn.konfan.clearentity.config.LanguageConfig;
 import cn.konfan.clearentity.gui.Bin;
 import cn.konfan.clearentity.task.EntityClear;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.*;
 
 public class CeExecutor implements TabExecutor {
     @Override
@@ -19,14 +20,14 @@ public class CeExecutor implements TabExecutor {
             this.help(sender);
             return true;
         }
-        String parm = args[0].toLowerCase();
+        String param = args[0].toLowerCase();
 
 
-        if (!sender.isPermissionSet("clearentity.admin") && !("open".equals(parm) || "egg".equals(parm))) {
+        if (!sender.isPermissionSet("clearentity.admin") && !("open".equals(param) || "egg".equals(param))) {
             return true;
         }
 
-        switch (parm) {
+        switch (param) {
 
             case "clear":
                 this.clear();
@@ -37,8 +38,8 @@ public class CeExecutor implements TabExecutor {
             case "search":
                 this.search(sender, label, args);
                 break;
-            case "test":
-                new EntityClear().run();
+            case "egg":
+                sender.sendMessage("_Godson: Hi~");
                 break;
             case "reload":
                 this.reload(sender);
@@ -54,7 +55,19 @@ public class CeExecutor implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return null;
+        switch (args.length) {
+            case 1:
+                return Arrays.asList("clear", "open", "search", "reload");
+            case 2:
+                return Arrays.asList("list", "chunk");
+            case 3:
+                Map<String, Integer> map = Search.searchEntity(null);
+                return new ArrayList<>(map.keySet());
+            case 4:
+                return Arrays.asList("20", "40", "80", "100");
+            default:
+                return Collections.singletonList("未知参数....");
+        }
     }
 
     private void help(CommandSender sender) {
@@ -88,7 +101,7 @@ public class CeExecutor implements TabExecutor {
                     break;
             }
         } catch (Exception e) {
-            sender.sendMessage(LanguageConfig.getString("Other.parmError"));
+            sender.sendMessage(LanguageConfig.getString("Other.paramError"));
         }
 
     }
