@@ -26,12 +26,12 @@ EntityManager:
       - 15
       - 5
 
-  #清理命名实体 (模组服务器必须开启）
+  #清理命名实体 (仅对原版生效）
   Rename: true
 
   #清理规则
   Rules:
-    #模组实体不按照实体类型清理 （推荐）
+    #模组实体不按照 animals与monster清理 （推荐）
     mode: true
     #白名单
     whitelist:
@@ -60,3 +60,6 @@ EntityManager:
         #item:      #掉落物
           #开启掉落物清理
           #enable: true
+
+  #更新检测 有新版本时会在控制台提示
+  Update: true

@@ -18,6 +18,9 @@ public class VersionScanner implements Runnable {
 
     @Override
     public void run() {
+        if (!ClearEntity.getInstance().getConfig().getBoolean("EntityManager.Update")){
+            return;
+        }
         try {
             URL url = new URL("https://bstats.org/api/v1/plugins/14080/charts/pluginVersion/data");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

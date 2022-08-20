@@ -70,7 +70,7 @@ public final class ClearEntity extends JavaPlugin {
          */
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new EntityNumScanner(), 0L, 60 * 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new EntityTimer(), 0L, 20);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new VersionScanner(),20);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new VersionScanner(), 20, (20 * 60 * 60) * 12);
     }
 
     public static ClearEntity getInstance() {

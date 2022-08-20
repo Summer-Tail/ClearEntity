@@ -98,7 +98,7 @@ public class NMSUtils {
 
             Object id = nbtGet.invoke(nbt, "id");
 
-            return id == null ? "" : id.toString();
+            return id == null ? "" : id.toString().replaceAll("\"","");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
