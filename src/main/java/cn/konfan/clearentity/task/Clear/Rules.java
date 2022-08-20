@@ -40,7 +40,7 @@ public class Rules {
         /**
          * Rename Entity
          */
-        if (!config.getBoolean("EntityManager.Rename") && !StringUtils.isBlank(entity.getCustomName())) {
+        if (saveID.startsWith("minecraft:") && !config.getBoolean("EntityManager.Rename") && !StringUtils.isBlank(entity.getCustomName())) {
             return false;
         }
 
@@ -64,7 +64,6 @@ public class Rules {
 
         if (!config.getBoolean("EntityManager.Rules.mode") || saveID.startsWith("minecraft:")) {
             if ((white.contains("animals") && entity instanceof Animals) || white.contains("monster") && entity instanceof Monster) {
-                System.out.println(saveID);
                 return false;
             }
         }
@@ -109,11 +108,11 @@ public class Rules {
              * Null if
              */
             if (StringUtils.isNotEmpty(lore) && itemLore == null) {
-                return false;
+                return true;
             }
 
             if (StringUtils.isNotEmpty(name) && StringUtils.isEmpty(itemName)) {
-                return false;
+                return true;
             }
 
 
@@ -145,6 +144,6 @@ public class Rules {
                 }
             }
         }
-        return !idRules && !nameRules && !loreRules;
+        return !idRules || !nameRules || !loreRules;
     }
 }
