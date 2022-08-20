@@ -2,11 +2,13 @@ package cn.konfan.clearentity.task;
 
 import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.utils.Version;
-import com.alibaba.fastjson.JSON;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +28,11 @@ public class VersionScanner implements Runnable {
             String versionJson = reader.readLine();
             reader.close();
             double pluginVersion = Integer.parseInt(ClearEntity.getInstance().getDescription().getVersion().replaceAll("\\.", ""));
-            List<Version> versions = JSON.parseArray(versionJson, Version.class);
+            Type list = new TypeToken<List<Version>>() {
+            }.getType();
+            List<Version> versions = new Gson().fromJson(versionJson, list);
+
+
             for (Version version : versions) {
                 double serverVersion = Integer.parseInt(version.getName().replaceAll("\\.", ""));
                 if (serverVersion > pluginVersion) {
