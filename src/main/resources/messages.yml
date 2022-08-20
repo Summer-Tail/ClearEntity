@@ -1,37 +1,38 @@
-prefix: "[&aClearEntity&r] "
-versionError: "&c获取服务器版本失败,请尝试更新插件以解决问题."
-methodError: "&c获取反射方法失败,请尝试更新插件以解决问题."
-listNoScanner: "&c没有扫描到任何实体...."
-listScannerNum: "&e 扫描到了 &b%COUNT% &e种实体"
-newJsonTextClick: "&a点击复制"
-oldJsonTextClick: "&a点击将配置节点到输入框"
-commandNotConsoleRun: "&c该命令不能由控制台执行!"
-paramError: "&c参数错误!"
-clickTpChunk: "点击送到该区块"
-showFormat: "&b%CSYS% &e共有: &b%COUNT% &e个实体"
-noSearchChunk: "&c没有符合条件的区块哦~"
-searchChunk: "&e找到了 &b%COUNT% &e个符合条件的区块!"
-notEnable: "&e服务器未启用垃圾箱功能!"
-binClear: "&e垃圾箱已经塞不下啦,将会在下次清理前清空哦~"
-binName: "&e&l公共垃圾箱"
-page: "页"
-previousPage: "上一页"
-noPreviousPage: "&e已经没有上一页啦!"
-nextPage: "下一页"
-noNextPage: "&e已经没有下一页啦!"
-BossBar: "&a扫地娘预计还有 &b %COUNT% &a秒后到达战场"
-reload: "&e配置文件重载成功!"
+Clear:
+  bossBarTitle: "&b服务器娘还有 &e%TIME% &b秒后到达战场"
+  before: "%prefix% &a实体和掉落物将在 &e%TIME%秒 &a后清除!"
+  clear: "%prefix% &a哎哟，这次清理了 &c%COUNT%个 &a怪蜀黍，我感觉自己萌萌哒~"
+  item: "%prefix% &a吃掉了 &c%COUNT%个 &a掉落物，拍拍肚皮走掉啦..."
+Search:
+Bin:
+  binTitle: "&b公共垃圾箱 - &e%PAGE%&b页"
+  binClear: "%prefix% &b垃圾箱被&e扫地娘&b一扫而空，拍拍肚皮开心的走啦～"
+  binMax: "%prefix% &b垃圾箱已经塞不下了哦，&e扫地娘&b将会在下次清理前全部私吞掉！"
+  previousPage: "上一页"
+  nextPage: "下一页"
+  notPreviousPage: "%prefix% &c已经是第一页啦，在翻就要溢出啦！！！"
+  notNextPage: "%prefix% &c你已经到达了世界的彼端，不要再翻啦～"
+Other:
+  prefix: "&b[服务器娘]"
+  reload: "%prefix% &e配置文件重载成功！"
+  notConsole: "%prefix% &c此命令无法在控制台执行！"
+  parmError: "%prefix% &c参数错误!"
+
+
+
+
 help: |-
-  - §a[ClearEntity] §e帮助-------------------#
-  - §b/ClearEntity clear
-  - §e立即执行一次清理任务
-  - §b/ClearEntity list
-  - §e查询世界中存在的实体列表
-  - §b/ClearEntity search <chunk/entity>
-  - §e[chunk]查询当前世界区块中的实体数量
-  - §e[entity]查询当前世界某实体所在区块及数量
-  - §b/ClearEntity reload
-  - §e重新载入配置文件
-  - §e#------------------------------------#
-  - §a命令简写模式: /ce
+  - &a[ClearEntity] &e帮助-------------------#
+  - &b/ClearEntity clear <entity/item>
+  - &e立即执行一次清理任务 <实体/掉落物>
+  - &b/ClearEntity search <chunk/entity/list>
+  - &e[list]查询所有世界中所存在的实体
+  - &e[chunk]查询当前世界区块中的实体数量
+  - &e[entity]查询当前世界某实体所在区块及数量
+  - &b/ClearEntity open
+  - &e打开服务器垃圾箱
+  - &b/ClearEntity reload
+  - &e重新载入配置文件
+  - &e#------------------------------------#
+  - &a命令简写模式: /ce
 

@@ -1,4 +1,4 @@
-package cn.konfan.clearentity.utils;
+package cn.konfan.clearentity;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

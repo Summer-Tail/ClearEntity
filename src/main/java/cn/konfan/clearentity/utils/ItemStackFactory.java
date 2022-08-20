@@ -1,14 +1,15 @@
 package cn.konfan.clearentity.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import cn.konfan.clearentity.ClearEntity;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ItemStackFactory {
     ItemStack item;
@@ -25,7 +26,7 @@ public class ItemStackFactory {
     }
 
     public ItemStackFactory(Material type, int amount) {
-        this(type, amount, (short)0);
+        this(type, amount, (short) 0);
     }
 
     public ItemStackFactory(Material type, int amount, short data) {
@@ -33,7 +34,7 @@ public class ItemStackFactory {
     }
 
     public ItemStackFactory(Material type, int amount, int data) {
-        this(type, amount, (short)data);
+        this(type, amount, (short) data);
     }
 
     public ItemStack toItemStack() {
@@ -45,54 +46,45 @@ public class ItemStackFactory {
         return this;
     }
 
-    public ItemStackFactory setDurability(int i) {
-        ItemMeta im = this.item.getItemMeta();
-        if (im instanceof Damageable) {
-            ((Damageable)im).setDamage(i);
-            this.item.setItemMeta(im);
-        }
-
-        return this;
-    }
 
     public ItemStackFactory setAmount(int a) {
         this.item.setAmount(a);
         return this;
     }
 
-    public ItemStackFactory setDisplayName( String name) {
+    public ItemStackFactory setDisplayName(String name) {
         ItemMeta im = this.item.getItemMeta();
         if (im != null) {
-            im.setDisplayName(name.replaceAll("&", "§").replace("§§", "&"));
+            im.setDisplayName(ClearEntity.convertColor(name));
             this.item.setItemMeta(im);
         }
 
         return this;
     }
 
-    public ItemStackFactory setLore( List<String> loreList) {
+    public ItemStackFactory setLore(List<String> loreList) {
         ItemMeta im = this.item.getItemMeta();
         if (im != null) {
-            im.setLore((List)loreList.stream().map(s -> s.replaceAll("&", "§").replace("§§", "&")).collect(Collectors.toList()));
+            im.setLore((List) loreList.stream().map(ClearEntity::convertColor).collect(Collectors.toList()));
             this.item.setItemMeta(im);
         }
 
         return this;
     }
 
-    public ItemStackFactory addLore( String s) {
+    public ItemStackFactory addLore(String s) {
         ItemMeta im = this.item.getItemMeta();
         if (im != null) {
             List<String> lore = im.getLore() != null ? im.getLore() : new ArrayList();
-            ((List)lore).add(s.replaceAll("&", "§").replace("§§", "&"));
-            im.setLore((List)lore);
+            ((List) lore).add(ClearEntity.convertColor(s));
+            im.setLore((List) lore);
             this.item.setItemMeta(im);
         }
 
         return this;
     }
 
-    public ItemStackFactory addEnchant( Enchantment enchant, int level, boolean ignoreLevelRestriction) {
+    public ItemStackFactory addEnchant(Enchantment enchant, int level, boolean ignoreLevelRestriction) {
         ItemMeta im = this.item.getItemMeta();
         if (im != null) {
             im.addEnchant(enchant, level, ignoreLevelRestriction);
@@ -102,7 +94,7 @@ public class ItemStackFactory {
         return this;
     }
 
-    public ItemStackFactory removeEnchant( Enchantment enchant) {
+    public ItemStackFactory removeEnchant(Enchantment enchant) {
         ItemMeta im = this.item.getItemMeta();
         if (im != null) {
             im.removeEnchant(enchant);
@@ -112,7 +104,7 @@ public class ItemStackFactory {
         return this;
     }
 
-    public ItemStackFactory addFlag( ItemFlag flag) {
+    public ItemStackFactory addFlag(ItemFlag flag) {
         ItemMeta im = this.item.getItemMeta();
         if (im != null) {
             im.addItemFlags(new ItemFlag[]{flag});
@@ -122,7 +114,7 @@ public class ItemStackFactory {
         return this;
     }
 
-    public ItemStackFactory removeFlag( ItemFlag flag) {
+    public ItemStackFactory removeFlag(ItemFlag flag) {
         ItemMeta im = this.item.getItemMeta();
         if (im != null) {
             im.removeItemFlags(new ItemFlag[]{flag});

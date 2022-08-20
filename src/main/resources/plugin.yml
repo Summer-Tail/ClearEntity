@@ -8,6 +8,6 @@ commands:
       - ce
     description: "/ClearEntity help  - Show Commands"
 permissions:
-  ClearEntity.admin:
+  clearentity.admin:
     default: op
     description: "use /ClearEntity [list/search/clear/reload]"

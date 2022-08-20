@@ -1,10 +1,8 @@
-/**
- * NeverLagReborn - Kotori0629, MrLv0816
- * Copyright (C) 2022-2022.
- */
+
 package cn.konfan.clearentity.utils;
 
 import cn.konfan.clearentity.ClearEntity;
+import cn.konfan.clearentity.config.LanguageConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -35,8 +33,7 @@ public class BossBarUtils implements Runnable {
         seconds--;
         double progress = bossBar.getProgress();
         bossBar.setProgress(progress >= time ? progress - time : 0);
-        bossBar.setTitle(Utils.getMessage("BossBar", true).replaceAll("%COUNT%", "" + seconds));
-
+        bossBar.setTitle(LanguageConfig.getString("Clear.bossBarTitle").replaceAll("%TIME%", "" + seconds));
     }
 
 
@@ -59,6 +56,6 @@ public class BossBarUtils implements Runnable {
 
                 task.run();
             }
-        }.runTaskTimer(ClearEntity.plugin, 0L, 20);
+        }.runTaskTimer(ClearEntity.getInstance(), 0L, 20);
     }
 }

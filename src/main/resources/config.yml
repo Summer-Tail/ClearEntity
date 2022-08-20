@@ -1,71 +1,62 @@
-Clear:
-  #(-1关闭)
-  #低于 400 个实体不会执行清理任务
-  Min: 400
-  #大于 2000 个实体立即进行一次清理 (模组服务器不建议开启)
-  Max: 4000
+#实体管理
+EntityManager:
+  #清理限制 (-1 关闭)
+  Limit:
+    #低于 min 值不会执行任何清理任务
+    min: 400
+    #大于 max 值立即进行清理 (Mod服不建议开启)
+    max: 4000
 
-#垃圾箱
-Bin:
-  #开启
-  Enable: true
-  #垃圾箱页数
-  Page: 4
+  #实体固定清理周期 (秒)
+  Time: 3600
 
-#清理周期 (秒)
-Time: 1800
+  #公共垃圾箱
+  Bin:
+    enable: true
+    page: 4
 
-Message:
-  Before: '&b[服务器娘]&a实体和掉落物将在 &e%TIME%秒 &a后清除!'
-  Clear: '&b[服务器娘]&a哎哟，这次清理了 &c%COUNT%个 &a垃圾，我感觉自己萌萌哒~'
-  #开启boss血条样式倒计时
-  BossBar: true
-  Time:
-    - 60
-    - 30
-    - 5
+  ##清理提示
+  Message:
+    #开启 Boss 血条倒计时
+    bossBar: true
+    #每次发送 before 的时间
+    time:
+      - 60
+      - 30
+      - 15
+      - 5
 
+  #清理命名实体 (模组服务器必须开启）
+  Rename: true
 
+  #清理规则
+  Rules:
+    #模组实体不按照实体类型清理 （推荐）
+    mode: true
+    #白名单
+    whitelist:
+      #动物
+      - "animals"
+    #黑名单
+    blacklist:
+      #怪物
+      - "monster"
 
-
-#规则
-Rules:
-  #模组实体不按照 [动物] 与 [怪物] 进行统一处理
-  Mode: true
-  #清理命名的生物(模组服务器必须为ture)
-  Nam: true
-  #黑名单
-  Black:
-    #怪物
-    - "monster"
     #掉落物
-    - "minecraft:item"
-  #白名单
-  White:
-    #动物
-    - "animals"
+    item:
+      #清理掉落物
+      enable: true
+      #钻石镐:                     #节点名(随意)
+        #id: "diamond_pickaxeid"   #物品id
+        #name: "钻石制成"           #物品名
+        #lore: "不被清理"           #描述
+        #name/lore 开头为*则开启模糊匹配 如： name: "*不被清理"
 
-  ItemWhite:
-    #钻石镐:                     #节点名(随意)
-      #id: "diamond_pickaxeid"  #物品id
-      #name: "不被清理*"         #物品名称
-      #lore: "不被清理"          #物品描述
-      #最后一个字符为*开启模糊匹配
-
-  #单独设置某个世界的规则
-  World:
-  #世界名
-  #world:
-  #Black:
-  #White:
-
-#禁止某些实体的生成(禁止幻翼请直接使用命令:D)
-EntityBlack:
-#僵尸
-#- "minecraft:zombie"
-
-#爆炸保护(仅有伤害)
-#本爆炸保护不会影响生物破坏等功能
-Explode:
-  Tnt: false
-  Creeper: false
+    #针对某个世界单独进行规则处理
+    custom:
+      #world:       #世界名
+        #whitelist: #白名单
+        #blacklist: #黑名单
+        #item:      #掉落物
+          #开启掉落物清理
+          #enable: true

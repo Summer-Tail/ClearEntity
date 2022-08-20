@@ -1,12 +1,13 @@
+/**
+ * NeverLagReborn - Kotori0629, MrLv0816
+ * Copyright (C) 2022-2022.
+ */
 package cn.konfan.clearentity.task;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 
-public class EntityNumTask implements Runnable {
-
+public class EntityNumScanner implements Runnable {
     public static int entity = 0;
     public static int item = 0;
 
