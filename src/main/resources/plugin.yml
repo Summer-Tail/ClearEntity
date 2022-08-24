@@ -11,3 +11,6 @@ permissions:
   clearentity.admin:
     default: op
     description: "use /ClearEntity [list/search/clear/reload]"
+  clearentity.open:
+    default: not op
+    description: "/ClearEntity open"

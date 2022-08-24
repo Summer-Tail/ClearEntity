@@ -33,7 +33,9 @@ public class CeExecutor implements TabExecutor {
                 this.clear();
                 break;
             case "open":
-                this.open(sender);
+                if (sender.isPermissionSet("clearentity.open")){
+                    this.open(sender);
+                }
                 break;
             case "search":
                 this.search(sender, label, args);
@@ -55,19 +57,26 @@ public class CeExecutor implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        switch (args.length) {
-            case 1:
-                return Arrays.asList("clear", "open", "search", "reload");
-            case 2:
-                return Arrays.asList("list", "chunk");
-            case 3:
-                Map<String, Integer> map = Search.searchEntity(null);
-                return new ArrayList<>(map.keySet());
-            case 4:
-                return Arrays.asList("20", "40", "80", "100");
-            default:
-                return Collections.singletonList("未知参数....");
+        if (sender.isPermissionSet("clearentity.admin")) {
+            switch (args.length) {
+                case 1:
+                    return Arrays.asList("clear", "open", "search", "reload");
+                case 2:
+                    return Arrays.asList("list", "chunk");
+                case 3:
+                    Map<String, Integer> map = Search.searchEntity(null);
+                    return new ArrayList<>(map.keySet());
+                case 4:
+                    return Arrays.asList("20", "40", "80", "100");
+                default:
+                    return Collections.singletonList("未知参数....");
+            }
+        } else if (sender.hasPermission("clearentity.open")) {
+            if (args.length == 1) {
+                return Collections.singletonList("open");
+            }
         }
+        return null;
     }
 
     private void help(CommandSender sender) {
