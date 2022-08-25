@@ -44,9 +44,9 @@ public class EntityClear implements Runnable {
          * Run clearEntity
          */
         Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new EntityClear(), sendTime.get(sendTime.size() - 1) * 20);
-        if (ClearEntity.getInstance().getConfig().getBoolean("EntityManager.Rules.item.enable")){
-            Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new ItemClear(), sendTime.get(sendTime.size() - 1) * 20);
-        }
+
+        Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new ItemClear(), sendTime.get(sendTime.size() - 1) * 20);
+
         /**
          * Send bossbar
          */
@@ -65,7 +65,7 @@ public class EntityClear implements Runnable {
         AtomicInteger num = new AtomicInteger();
         Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
 
-            if (entity instanceof Item){
+            if (entity instanceof Item) {
                 return;
             }
 

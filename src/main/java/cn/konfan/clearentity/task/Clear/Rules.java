@@ -98,52 +98,55 @@ public class Rules {
         boolean nameRules = true;
         boolean loreRules = true;
 
-        for (String key : itemConfig.getKeys(false)) {
-            if ("enable".equals(key)) continue;
-            String id = itemConfig.getString(key + ".id");
-            String name = itemConfig.getString(key + ".name");
-            String lore = itemConfig.getString(key + ".lore");
+        if (itemConfig.getKeys(false).size() > 1){
+            for (String key : itemConfig.getKeys(false)) {
+                if ("enable".equals(key)) continue;
+                String id = itemConfig.getString(key + ".id");
+                String name = itemConfig.getString(key + ".name");
+                String lore = itemConfig.getString(key + ".lore");
 
-            /**
-             * Null if
-             */
-            if (StringUtils.isNotEmpty(lore) && itemLore == null) {
-                return true;
-            }
+                /**
+                 * Null if
+                 */
+                if (StringUtils.isNotEmpty(lore) && itemLore == null) {
+                    return true;
+                }
 
-            if (StringUtils.isNotEmpty(name) && StringUtils.isEmpty(itemName)) {
-                return true;
-            }
+                if (StringUtils.isNotEmpty(name) && StringUtils.isEmpty(itemName)) {
+                    return true;
+                }
 
 
-            /**
-             * id判断
-             */
-            if (StringUtils.isNotEmpty(id)) {
-                idRules = id.equals(itemID);
-            }
+                /**
+                 * id判断
+                 */
+                if (StringUtils.isNotEmpty(id)) {
+                    idRules = id.equals(itemID);
+                }
 
-            /**
-             * 名字判断
-             */
-            if (StringUtils.isNotEmpty(name)) {
-                nameRules = itemName.startsWith("*") ? name.contains(itemName) : name.equals(itemName);
-            }
+                /**
+                 * 名字判断
+                 */
+                if (StringUtils.isNotEmpty(name)) {
+                    nameRules = itemName.startsWith("*") ? name.contains(itemName) : name.equals(itemName);
+                }
 
-            /**
-             * 描述判断
-             */
-            if (StringUtils.isNotEmpty(lore)) {
-                for (String s : itemLore) {
+                /**
+                 * 描述判断
+                 */
+                if (StringUtils.isNotEmpty(lore)) {
+                    for (String s : itemLore) {
 
-                    loreRules = s.startsWith("*") ? lore.contains(itemName) : lore.equals(itemName);
+                        loreRules = s.startsWith("*") ? lore.contains(itemName) : lore.equals(itemName);
 
-                    if (idRules && nameRules && loreRules) {
-                        return false;
+                        if (idRules && nameRules && loreRules) {
+                            return false;
+                        }
                     }
                 }
             }
+            return !idRules || !nameRules || !loreRules;
         }
-        return !idRules || !nameRules || !loreRules;
+        return true;
     }
 }
