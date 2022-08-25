@@ -12,5 +12,5 @@ permissions:
     default: op
     description: "use /ClearEntity [list/search/clear/reload]"
   clearentity.open:
-    default: not op
+    default: true
     description: "/ClearEntity open"
