@@ -97,8 +97,7 @@ public class Rules {
         boolean idRules = true;
         boolean nameRules = true;
         boolean loreRules = true;
-
-        if (itemConfig.getKeys(false).size() > 1){
+        if (itemConfig.getKeys(false).size() > 1) {
             for (String key : itemConfig.getKeys(false)) {
                 if ("enable".equals(key)) continue;
                 String id = itemConfig.getString(key + ".id");
@@ -128,7 +127,7 @@ public class Rules {
                  * 名字判断
                  */
                 if (StringUtils.isNotEmpty(name)) {
-                    nameRules = itemName.startsWith("*") ? name.contains(itemName) : name.equals(itemName);
+                    nameRules = name.startsWith("*") ? itemName.contains(name.replace("*","")) : name.equals(itemName);
                 }
 
                 /**
@@ -136,9 +135,7 @@ public class Rules {
                  */
                 if (StringUtils.isNotEmpty(lore)) {
                     for (String s : itemLore) {
-
-                        loreRules = s.startsWith("*") ? lore.contains(itemName) : lore.equals(itemName);
-
+                        loreRules = lore.startsWith("*") ? s.contains(lore.replace("*", "")) : s.equals(lore);
                         if (idRules && nameRules && loreRules) {
                             return false;
                         }
