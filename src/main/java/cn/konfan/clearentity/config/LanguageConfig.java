@@ -23,7 +23,7 @@ public class LanguageConfig {
     }
 
     public static void reload() {
-        YamlConfiguration.loadConfiguration(file);
+        langYaml = YamlConfiguration.loadConfiguration(file);
     }
 
     public static String getString(String path) {
