@@ -18,7 +18,7 @@ public class NMSUtils {
 
     private static Object nmsEntity;
     private static String methodName;
-    private static final Entity tempEntity;
+    private static Entity tempEntity;
 
     static {
         try {
@@ -26,7 +26,7 @@ public class NMSUtils {
             tempEntity = world.spawnEntity(world.getSpawnLocation(), EntityType.ENDERMAN);
             nmsEntity = Class.forName("org.bukkit.craftbukkit." + getNmsVersion() + ".entity.CraftEntity").cast(tempEntity);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot setup nmsModules: " + e.getMessage());
+           e.printStackTrace();
         }
     }
 
@@ -43,8 +43,9 @@ public class NMSUtils {
             Object saveId = nmsEntity.getClass().getMethod(getSaveIDMethodName()).invoke(nmsEntity);
             return saveId == null ? "" : saveId.toString();
         } catch (Exception e) {
-            throw new RuntimeException("Cannot setup nmsModule: " + e.getMessage());
+           e.printStackTrace();
         }
+        return "";
     }
 
     public static String getItemID(ItemStack stack) {
@@ -100,8 +101,9 @@ public class NMSUtils {
 
             return id == null ? "" : id.toString().replaceAll("\"","");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return "";
     }
 
     /**
@@ -127,6 +129,8 @@ public class NMSUtils {
                 } else if (method.getName().equalsIgnoreCase("bo")) {
                     methodName = method.getName();
                 } else if (method.getName().equalsIgnoreCase("bk")) {
+                    methodName = method.getName();
+                } else if (method.getName().equalsIgnoreCase("bn")) {
                     methodName = method.getName();
                 }
             }
