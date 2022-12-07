@@ -137,7 +137,7 @@ public class NMSUtils {
             nmsEntity.getClass().getMethod(methodName).invoke(nmsEntity);
             return methodName;
         } catch (Exception e) {
-            throw new RuntimeException("Cannot setup nmsModule: " + e.getMessage());
+            throw new RuntimeException("Cannot setup getSaveIDMethodName: " + e.getMessage());
         } finally {
             try {
                 tempEntity.remove();
