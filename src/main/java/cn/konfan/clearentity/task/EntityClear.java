@@ -10,16 +10,24 @@ import cn.konfan.clearentity.gui.Bin;
 import cn.konfan.clearentity.task.Clear.Rules;
 import cn.konfan.clearentity.utils.BossBarUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 
 public class EntityClear implements Runnable {
+
+    public static int clearNum = 0;
+    public static int index = 0;
+    public static List<Chunk> chunks = new ArrayList<>();
+
+
     public static void clearStart() {
 
 
@@ -43,6 +51,13 @@ public class EntityClear implements Runnable {
         /**
          * Run clearEntity
          */
+
+        //Load Chunks
+        Bukkit.getWorlds().forEach(world -> {
+            chunks.addAll(Arrays.asList(world.getLoadedChunks()));
+        });
+
+
         Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new EntityClear(), sendTime.get(sendTime.size() - 1) * 20);
 
         Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new ItemClear(), sendTime.get(sendTime.size() - 1) * 20);
@@ -62,28 +77,44 @@ public class EntityClear implements Runnable {
         /**
          * Clear entities
          */
-        AtomicInteger num = new AtomicInteger();
-        Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
 
-            if (entity instanceof Item) {
-                return;
+        System.out.println("载入区块共计: " + Collections.synchronizedList(EntityClear.chunks).size() + " | 正在处理: " + index);
+        int size = Math.min(index, Collections.synchronizedList(EntityClear.chunks).size());
+        for (int i = index; i < size; i++) {
+
+            Entity[] entities = Collections.synchronizedList(EntityClear.chunks).get(i).getEntities();
+            for (Entity entity : entities) {
+                if (entity instanceof Item) {
+                    return;
+                }
+
+                if (!Rules.getRules(entity)) {
+                    return;
+                }
+                entity.remove();
+                if (!entity.isDead()) {
+                    return;
+                }
+                clearNum++;
             }
 
-            if (!Rules.getRules(entity)) {
-                return;
-            }
-            entity.remove();
-            if (!entity.isDead()) {
-                return;
-            }
-            num.getAndIncrement();
+        }
 
-        }));
+
+        //continue
+        if (index < Collections.synchronizedList(EntityClear.chunks).size()) {
+            index = index + ClearEntity.getInstance().getConfig().getInt("EntityManager.Limit.loadChunk");
+            Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new EntityClear(), 2L);
+            return;
+        }
+
+
+
 
         /**
          * Send completeMessage
          */
-        Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Clear.clear").replaceAll("%COUNT%", "" + num));
+        Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Clear.clear").replaceAll("%COUNT%", "" + clearNum));
 
         /**
          * Send binMaxMessage
@@ -91,6 +122,7 @@ public class EntityClear implements Runnable {
         if (Bin.clear) {
             Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Bin.binClear"));
         }
-
+        index = 0;
+        clearNum = 0;
     }
 }
