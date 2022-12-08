@@ -3,6 +3,7 @@ package cn.konfan.clearentity;
 import cn.konfan.clearentity.command.CeExecutor;
 import cn.konfan.clearentity.config.LanguageConfig;
 import cn.konfan.clearentity.gui.Bin;
+import cn.konfan.clearentity.listener.FarmProtectListener;
 import cn.konfan.clearentity.listener.GuiListener;
 import cn.konfan.clearentity.task.EntityNumScanner;
 import cn.konfan.clearentity.task.EntityTimer;
@@ -64,6 +65,9 @@ public final class ClearEntity extends JavaPlugin {
          * Register event listener
          */
         Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
+        if (getConfig().getBoolean("EntityManager.enableFarmProtect")) {
+            Bukkit.getPluginManager().registerEvents(new FarmProtectListener(), this);
+        }
 
         /**
          * Start task

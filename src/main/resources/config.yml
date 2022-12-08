@@ -66,3 +66,5 @@ EntityManager:
 
   #更新检测 有新版本时会在控制台提示
   Update: true
+  #开启防止踩踏农作物
+  enableFarmProtect: true
