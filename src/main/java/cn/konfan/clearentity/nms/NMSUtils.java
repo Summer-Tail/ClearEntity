@@ -23,10 +23,11 @@ public class NMSUtils {
     static {
         try {
             World world = Bukkit.getWorld(Bukkit.getWorld("DIM1") != null ? "DIM1" : "world_the_end");
+            world = world == null ? Bukkit.getWorlds().get(0) : world;
             tempEntity = world.spawnEntity(world.getSpawnLocation(), EntityType.ENDERMAN);
             nmsEntity = Class.forName("org.bukkit.craftbukkit." + getNmsVersion() + ".entity.CraftEntity").cast(tempEntity);
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -43,7 +44,7 @@ public class NMSUtils {
             Object saveId = nmsEntity.getClass().getMethod(getSaveIDMethodName()).invoke(nmsEntity);
             return saveId == null ? "" : saveId.toString();
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return "";
     }
@@ -99,7 +100,7 @@ public class NMSUtils {
 
             Object id = nbtGet.invoke(nbt, "id");
 
-            return id == null ? "" : id.toString().replaceAll("\"","");
+            return id == null ? "" : id.toString().replaceAll("\"", "");
         } catch (Exception e) {
             e.printStackTrace();
         }
