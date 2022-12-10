@@ -66,5 +66,10 @@ EntityManager:
 
   #更新检测 有新版本时会在控制台提示
   Update: true
-  #开启防止踩踏农作物
-  enableFarmProtect: true
+  #开启防止玩家踩踏农作物
+  enablePlayerFarmProtect: true
+  #开启防止实体踩踏农作物
+  enableEntityFarmProtect: true
+  #开启防止踩踏作物的世界
+  farm-protect-worlds:
+    - "world"
