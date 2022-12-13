@@ -6,10 +6,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class EntityTimer implements Runnable {
     private int time;
     private boolean maxClear = false;
-    private final FileConfiguration config = ClearEntity.getInstance().getConfig();
 
     @Override
     public void run() {
+
+        FileConfiguration config = ClearEntity.getInstance().getConfig();
+
+
         time++;
         int min = config.getInt("EntityManager.Limit.min");
         int max = config.getInt("EntityManager.Limit.max");
