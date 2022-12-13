@@ -47,7 +47,7 @@ EntityManager:
       #清理掉落物
       enable: true
       #quick-shop:    不清理QuickShop悬浮物(仅测试1.19.2)
-        #lore: '"shopLocation":"Location{'
+        #lore: '*"shopLocation":"Location{'
 
       #钻石镐:                     #节点名(随意)
         #id: "minecraft:diamond_pickaxe"   #物品id
