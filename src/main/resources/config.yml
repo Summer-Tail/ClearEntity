@@ -64,12 +64,22 @@ EntityManager:
           #开启掉落物清理
           #enable: true
 
-  #更新检测 有新版本时会在控制台提示
-  Update: true
   #开启防止玩家踩踏农作物
   enablePlayerFarmProtect: true
   #开启防止实体踩踏农作物
   enableEntityFarmProtect: true
   #开启防止踩踏作物的世界
   farm-protect-worlds:
-    - "world"
+  #  - "world"
+
+  #实体爆炸保护
+  EntityExplode:
+  #TNT
+  #  - "minecraft:tnt"
+  #苦力怕
+  #  - "minecraft:creeper"
+
+
+
+  #更新检测 有新版本时会在控制台提示
+  Update: true

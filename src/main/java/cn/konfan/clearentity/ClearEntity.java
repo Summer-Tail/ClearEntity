@@ -3,6 +3,7 @@ package cn.konfan.clearentity;
 import cn.konfan.clearentity.command.CeExecutor;
 import cn.konfan.clearentity.config.LanguageConfig;
 import cn.konfan.clearentity.gui.Bin;
+import cn.konfan.clearentity.listener.EntityExplodeListener;
 import cn.konfan.clearentity.listener.FarmProtectListener;
 import cn.konfan.clearentity.listener.GuiListener;
 import cn.konfan.clearentity.task.EntityNumScanner;
@@ -66,6 +67,7 @@ public final class ClearEntity extends JavaPlugin {
          */
         Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
         Bukkit.getPluginManager().registerEvents(new FarmProtectListener(), this);
+        Bukkit.getPluginManager().registerEvents(new EntityExplodeListener(), this);
 
         /**
          * Start task
