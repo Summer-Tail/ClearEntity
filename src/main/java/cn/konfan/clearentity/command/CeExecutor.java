@@ -5,6 +5,7 @@ import cn.konfan.clearentity.command.search.Search;
 import cn.konfan.clearentity.config.LanguageConfig;
 import cn.konfan.clearentity.gui.Bin;
 import cn.konfan.clearentity.task.EntityClear;
+import cn.konfan.clearentity.task.ItemClear;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -30,10 +31,14 @@ public class CeExecutor implements TabExecutor {
         switch (param) {
 
             case "clear":
-                this.clear();
+                if (args.length >= 2 && "true".equals(args[1].toLowerCase())) {
+                    this.rightClear();
+                } else {
+                    this.clear();
+                }
                 break;
             case "open":
-                if (sender.isPermissionSet("clearentity.open")){
+                if (sender.isPermissionSet("clearentity.open")) {
                     this.open(sender);
                 }
                 break;
@@ -62,7 +67,7 @@ public class CeExecutor implements TabExecutor {
                 case 1:
                     return Arrays.asList("clear", "open", "search", "reload");
                 case 2:
-                    return Arrays.asList("list", "chunk");
+                    return Arrays.asList("true", "list", "chunk");
                 case 3:
                     Map<String, Integer> map = Search.searchEntity(null);
                     return new ArrayList<>(map.keySet());
@@ -81,6 +86,12 @@ public class CeExecutor implements TabExecutor {
 
     private void help(CommandSender sender) {
         sender.sendMessage(LanguageConfig.getString("help"));
+    }
+
+
+    private void rightClear() {
+        new EntityClear().run();
+        new ItemClear().run();
     }
 
 
