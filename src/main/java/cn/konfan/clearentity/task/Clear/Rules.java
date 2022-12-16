@@ -109,53 +109,41 @@ public class Rules {
             String name = itemConfig.getString(key + ".name");
             String lore = itemConfig.getString(key + ".lore");
 
-            boolean idRules = StringUtils.isEmpty(id);
-            boolean nameRules = StringUtils.isEmpty(name);
-            boolean loreRules = StringUtils.isEmpty(lore);
-
-
             //id判断
-            if (StringUtils.isNotEmpty(id) && id.equalsIgnoreCase(itemID)) {
-                idRules = true;
+            if (StringUtils.isNotEmpty(id) && !id.equalsIgnoreCase(itemID)) {
+                continue;
             }
 
             //name判断
             if (StringUtils.isNotEmpty(name)) {
                 if (name.startsWith("*")) { //模糊匹配
-                    if (itemName.toLowerCase().contains(name.replace("*", "").toLowerCase())) {
-                        nameRules = true;
+                    if (!itemName.toLowerCase().contains(name.replace("*", "").toLowerCase())) {
+                        continue;
                     }
                 } else { //普通匹配
-                    if (name.equals(itemName)) {
-                        nameRules = true;
+                    if (!name.equals(itemName)) {
+                        continue;
                     }
                 }
             }
 
             //lore判断
             if (StringUtils.isNotEmpty(lore)) {
-                if (itemLore == null) {
-                    continue;
-                }
+                if (itemLore == null) continue;
+
                 for (String s : itemLore) {
                     if (s.startsWith("*")) { //模糊匹配
-                        if (s.toLowerCase().contains(itemName.toLowerCase())) {
-                            loreRules = true;
+                        if (s.toLowerCase().contains(lore.replace("*", "").toLowerCase())) {
+                            return false;
                         }
                     } else { //普通匹配
-                        if (s.equals(itemName)) {
-                            loreRules = true;
+                        if (s.equals(lore)) {
+                            return false;
                         }
                     }
                 }
             }
-            System.out.println("配置节点：" + key);
-            System.out.println("|" + itemID + "  || id=" + idRules + "|" + "name=" + nameRules + "|lore=" + loreRules + "|");
-
-
-            if (idRules && loreRules && nameRules) {
-                return false;
-            }
+            return false;
         }
 
         return true;
