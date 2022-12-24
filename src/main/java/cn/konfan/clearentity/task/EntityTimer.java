@@ -21,7 +21,7 @@ public class EntityTimer implements Runnable {
             EntityClear.clearStart();
             return;
         }
-        if ((EntityNumScanner.entity > min) && min != -1) {
+        if ((EntityNumScanner.entity < min) && min != -1) {
             return;
         }
         if (time != config.getInt("EntityManager.Time")) {

@@ -93,7 +93,7 @@ public class Rules {
 
 
         if (itemConfig == null || itemConfig.getKeys(false).size() == 1) {
-            return false;
+            return true;
         }
         if (!itemConfig.getBoolean("enable")) {
             return false;
