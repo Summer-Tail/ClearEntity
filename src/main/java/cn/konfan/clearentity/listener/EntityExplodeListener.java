@@ -13,7 +13,7 @@ public class EntityExplodeListener implements Listener {
 
 
     @EventHandler
-    public void EntityExplode(EntityExplodeEvent event) {
+    public void onEntityExplode(EntityExplodeEvent event) {
         String saveID = NMSUtils.getSaveID(event.getEntity());
         List<String> entityList = ClearEntity.getInstance().getConfig().getStringList("EntityManager.EntityExplode");
         entityList.forEach(entity -> {
