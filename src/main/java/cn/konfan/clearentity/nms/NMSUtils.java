@@ -117,10 +117,8 @@ public class NMSUtils {
             return methodName;
         }
         try {
-
             Method getHandle = nmsEntity.getClass().getMethod("getHandle");
             nmsEntity = getHandle.invoke(nmsEntity);
-
             for (Method method : nmsEntity.getClass().getMethods()) {
                 if (!"class java.lang.String".equals(method.getGenericReturnType().toString())) {
                     continue;
@@ -133,12 +131,14 @@ public class NMSUtils {
                     methodName = method.getName();
                 } else if (method.getName().equalsIgnoreCase("bn")) {
                     methodName = method.getName();
+                } else if (method.getName().equalsIgnoreCase("bq")) {
+                    methodName = method.getName();
                 }
             }
             nmsEntity.getClass().getMethod(methodName).invoke(nmsEntity);
             return methodName;
         } catch (Exception e) {
-            throw new RuntimeException("Cannot setup getSaveIDMethodName: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 tempEntity.remove();
@@ -146,6 +146,7 @@ public class NMSUtils {
                 //
             }
         }
+        return null;
     }
 
     /**
