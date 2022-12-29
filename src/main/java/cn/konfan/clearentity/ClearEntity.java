@@ -6,6 +6,7 @@ import cn.konfan.clearentity.gui.Bin;
 import cn.konfan.clearentity.listener.EntityExplodeListener;
 import cn.konfan.clearentity.listener.FarmProtectListener;
 import cn.konfan.clearentity.listener.GuiListener;
+import cn.konfan.clearentity.nms.NMSUtils;
 import cn.konfan.clearentity.task.EntityNumScanner;
 import cn.konfan.clearentity.task.EntityTimer;
 import cn.konfan.clearentity.task.VersionScanner;
@@ -13,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.Objects;
 
 
@@ -41,13 +43,8 @@ public final class ClearEntity extends JavaPlugin {
     }
 
     private void init() {
-        try {
-            Metrics metrics = new Metrics(this, 14080);
-
-        } catch (Throwable ignore) {
-            //
-        }
-
+        getLogger().info("Used NMS version: " + ChatColor.GREEN + NMSUtils.getNmsVersion());
+        getLogger().info("Loading config and language file...");
         /**
          * Save default config
          */
@@ -55,8 +52,9 @@ public final class ClearEntity extends JavaPlugin {
         /**
          * Save default messages
          */
-        saveResource("messages.yml", false);
-
+        if (!(new File(getDataFolder(), "messages.yml").exists())) {
+            saveResource("messages.yml", false);
+        }
         /**
          * Set commandExecutor
          */
@@ -75,6 +73,8 @@ public final class ClearEntity extends JavaPlugin {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new EntityNumScanner(), 0L, 60 * 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new EntityTimer(), 0L, 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new VersionScanner(), 20, (20 * 60 * 60) * 12);
+
+        new Metrics(this, 14080);
     }
 
     public static ClearEntity getInstance() {

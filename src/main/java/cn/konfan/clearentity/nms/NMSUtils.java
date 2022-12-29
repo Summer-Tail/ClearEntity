@@ -154,7 +154,7 @@ public class NMSUtils {
      *
      * @return Server native version
      */
-    private static String getNmsVersion() {
+    public static String getNmsVersion() {
         try {
             String nmsVersion = Bukkit.getServer().getClass().getName().split("\\.")[3];
             Class.forName("org.bukkit.craftbukkit." + nmsVersion + ".CraftServer");
