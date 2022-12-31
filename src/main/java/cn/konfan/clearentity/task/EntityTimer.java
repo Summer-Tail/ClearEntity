@@ -17,6 +17,7 @@ public class EntityTimer implements Runnable {
         int min = config.getInt("EntityManager.Limit.min");
         int max = config.getInt("EntityManager.Limit.max");
         if ((EntityNumScanner.entity > max) && max != -1 && !maxClear) {
+            time = 0;
             maxClear = true;
             EntityClear.clearStart();
             return;
@@ -24,7 +25,7 @@ public class EntityTimer implements Runnable {
         if ((EntityNumScanner.entity < min) && min != -1) {
             return;
         }
-        if (time != config.getInt("EntityManager.Time")) {
+        if (time < config.getInt("EntityManager.Time")) {
             return;
         }
         EntityClear.clearStart();
