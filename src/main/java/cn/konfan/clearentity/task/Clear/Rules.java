@@ -11,8 +11,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,9 +85,14 @@ public class Rules {
         config = ClearEntity.getInstance().getConfig();
 
         ItemStack itemStack = ((Item) item).getItemStack();
-        String itemName = Objects.requireNonNull(itemStack.getItemMeta()).getDisplayName();
-        List<String> itemLore = itemStack.getItemMeta().getLore();
+        String itemName = "";
+        List<String> itemLore = new ArrayList<>();
         String itemID = NMSUtils.getItemID(itemStack);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta != null) {
+            itemName = itemMeta.getDisplayName();
+            itemLore = itemMeta.getLore();
+        }
 
 
         ConfigurationSection section = config.getConfigurationSection("EntityManager.Rules.custom." + item.getWorld().getName() + ".item");
