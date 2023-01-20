@@ -19,7 +19,7 @@ public class Bin {
     public static Boolean clear = false;
     private static final HashMap<UUID, Integer> pages = new HashMap<>();
     private static final List<Inventory> invs = new ArrayList<>();
-    private static final Integer maxPage = ClearEntity.getInstance().getConfig().getInt("EntityManager.Bin.page");
+    private static Integer maxPage = ClearEntity.getInstance().getConfig().getInt("EntityManager.Bin.page");
 
     static {
         initGui();
@@ -27,6 +27,7 @@ public class Bin {
 
     private static void initGui() {
         invs.clear();
+        maxPage = ClearEntity.getInstance().getConfig().getInt("EntityManager.Bin.page");
         for (int i = 0; i < maxPage; i++) {
             invs.add(Bukkit.createInventory(null, 54, LanguageConfig.getString("Bin.binTitle").replaceAll("%PAGE%", i + 1 + "")));
 
@@ -97,14 +98,16 @@ public class Bin {
     }
 
     public static void closeAllGui() {
-        try {
-            getPages().forEach((uuid, integer) -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).closeInventory());
-        } catch (NullPointerException ignore) {
-            //
+        for (UUID uuid : getPages().keySet()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                player.closeInventory();
+            }
         }
     }
 
     public static void clearInv() {
+        Bin.closeAllGui();
         initGui();
     }
 
