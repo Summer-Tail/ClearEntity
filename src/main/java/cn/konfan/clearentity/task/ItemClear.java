@@ -13,19 +13,10 @@ import org.bukkit.entity.Item;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ItemClear implements Runnable {
+public class ItemClear {
 
-    @Override
-    public void run() {
-        /**
-         * Clear Bin
-         */
-        if (Bin.clear) {
-            Bin.clear = false;
-            Bin.clearInv();
-            Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Bin.binClear"));
-        }
 
+    public int run() {
 
         AtomicInteger num = new AtomicInteger();
         Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
@@ -41,14 +32,12 @@ public class ItemClear implements Runnable {
              */
             boolean itemRules = Rules.getItemRules(entity);
 
-            if (itemRules){
+            if (itemRules) {
                 entity.remove();
                 num.getAndIncrement();
-            }else {
+            } else {
                 return;
             }
-
-
 
 
             /**
@@ -57,15 +46,9 @@ public class ItemClear implements Runnable {
             if (!ClearEntity.getInstance().getConfig().getBoolean("EntityManager.Bin.enable")) {
                 return;
             }
-            boolean add = Bin.addItem(((Item) entity).getItemStack());
-            if (add) {
-                return;
-            }
-            Bin.clear = true;
+            Bin.addItem(((Item) entity).getItemStack());
+
         }));
-
-
-        Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Clear.item").replaceAll("%COUNT%", num + ""));
-
+        return Integer.parseInt(String.valueOf(num));
     }
 }

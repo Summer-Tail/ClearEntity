@@ -7,6 +7,7 @@ import cn.konfan.clearentity.gui.Bin;
 import cn.konfan.clearentity.task.EntityClear;
 import cn.konfan.clearentity.task.ItemClear;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -29,7 +30,6 @@ public class CeExecutor implements TabExecutor {
         }
 
         switch (param) {
-
             case "clear":
                 if (args.length >= 2 && "true".equals(args[1].toLowerCase())) {
                     this.rightClear();
@@ -91,7 +91,6 @@ public class CeExecutor implements TabExecutor {
 
     private void rightClear() {
         new EntityClear().run();
-        new ItemClear().run();
     }
 
 
@@ -136,6 +135,7 @@ public class CeExecutor implements TabExecutor {
 
     private void reload(CommandSender sender) {
         ClearEntity.getInstance().reloadConfig();
+        Bin.clearInv();
         sender.sendMessage(LanguageConfig.getString("Other.reload"));
     }
 }

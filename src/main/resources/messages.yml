@@ -1,13 +1,12 @@
 Clear:
   bossBarTitle: "&b服务器娘还有 &e%TIME% &b秒后到达战场"
   before: "%prefix% &a实体和掉落物将在 &e%TIME%秒 &a后清除!"
-  clear: "%prefix% &a哎哟，这次清理了 &c%COUNT%个 &a怪蜀黍，我感觉自己萌萌哒~"
-  item: "%prefix% &a吃掉了 &c%COUNT%个 &a掉落物，拍拍肚皮走掉啦..."
+  clear: "%prefix% &a哎哟，这次清理了 &c%ITEMCOUNT% &a个垃圾和 &c%COUNT%个 &a怪蜀黍，我感觉自己萌萌哒~"
 Search:
 Bin:
   binTitle: "&b公共垃圾箱 - &e%PAGE%&b页"
+  before: "%prefix% &a垃圾箱将会在 &e%TIME%秒 &a被扫地娘清空，快来看看吧~"
   binClear: "%prefix% &b垃圾箱被&e扫地娘&b一扫而空，拍拍肚皮开心的走啦～"
-  binMax: "%prefix% &b垃圾箱已经塞不下了哦，&e扫地娘&b将会在下次清理前全部私吞掉！"
   previousPage: "上一页"
   nextPage: "下一页"
   notPreviousPage: "%prefix% &c已经是第一页啦，在翻就要溢出啦！！！"

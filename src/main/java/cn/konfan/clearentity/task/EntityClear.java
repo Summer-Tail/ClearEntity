@@ -10,43 +10,37 @@ import cn.konfan.clearentity.gui.Bin;
 import cn.konfan.clearentity.task.Clear.Rules;
 import cn.konfan.clearentity.utils.BossBarUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 
 public class EntityClear implements Runnable {
+
+    public static int clearNum = 0;
+    public static int index = 0;
+    public static List<Chunk> chunks = new ArrayList<>();
+
+
     public static void clearStart() {
 
 
         /**
-         * Sort
-         */
-        List<Integer> sendTime = ClearEntity.getInstance().getConfig().getIntegerList("EntityManager.Message.time");
-        Collections.sort(sendTime);
-
-        /**
          * Send beforeMessage
          */
-        String before = LanguageConfig.getString("Clear.before");
-        int maxTime = sendTime.get(sendTime.size() - 1);
-        Bukkit.getScheduler().runTask(ClearEntity.getInstance(), () -> Bukkit.getServer().broadcastMessage(before.replaceAll("%TIME%", "" + maxTime)));
-        for (int i = sendTime.size() - 2; i >= 0; i--) {
-            int time = sendTime.get(i);
-            Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), () -> Bukkit.getServer().broadcastMessage(before.replaceAll("%TIME%", "" + time)), (maxTime - sendTime.get(i)) * 20L);
-        }
+        List<Integer> sendTime = ClearEntity.getInstance().getConfig().getIntegerList("EntityManager.Message.time");
+        ClearEntity.SendCountdownUtil(sendTime, LanguageConfig.getString("Clear.before"), "%TIME%");
 
         /**
          * Run clearEntity
          */
         Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new EntityClear(), sendTime.get(sendTime.size() - 1) * 20);
-
-        Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new ItemClear(), sendTime.get(sendTime.size() - 1) * 20);
-
         /**
          * Send bossbar
          */
@@ -59,38 +53,58 @@ public class EntityClear implements Runnable {
     @Override
     public void run() {
 
+        if (chunks.size() == 0) {
+            Bukkit.getWorlds().forEach(world -> {
+                chunks.addAll(Arrays.asList(world.getLoadedChunks()));
+            });
+        }
+
+
         /**
          * Clear entities
          */
-        AtomicInteger num = new AtomicInteger();
-        Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
 
-            if (entity instanceof Item) {
-                return;
-            }
 
-            if (!Rules.getRules(entity)) {
-                return;
-            }
-            entity.remove();
-            if (!entity.isDead()) {
-                return;
-            }
-            num.getAndIncrement();
+        int loadChunkNum = ClearEntity.getInstance().getConfig().getInt("EntityManager.Limit.loadChunk");
+        int clearSize = Math.min(loadChunkNum, Collections.synchronizedList(EntityClear.chunks).size());
+        int chunkSize = Collections.synchronizedList(EntityClear.chunks).size();
 
-        }));
+        for (int i = index; i < Math.min(chunkSize, clearSize + index); i++) {
+            index = i;
+            Entity[] entities = Collections.synchronizedList(EntityClear.chunks).get(i).getEntities();
+            for (Entity entity : entities) {
+                if (entity instanceof Item) {
+                    continue;
+                }
+
+                if (!Rules.getRules(entity)) {
+                    continue;
+                }
+                entity.remove();
+                if (!entity.isDead()) {
+                    continue;
+                }
+                clearNum++;
+            }
+        }
+
+        //continue
+        if (index < Collections.synchronizedList(EntityClear.chunks).size() - 1) {
+            Bukkit.getScheduler().runTaskLater(ClearEntity.getInstance(), new EntityClear(), 2L);
+            return;
+        }
+
+
+        int itemNum = new ItemClear().run();
+
 
         /**
          * Send completeMessage
          */
-        Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Clear.clear").replaceAll("%COUNT%", "" + num));
+        Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Clear.clear").replaceAll("%COUNT%", "" + clearNum).replaceAll("%ITEMCOUNT%", itemNum + ""));
 
-        /**
-         * Send binMaxMessage
-         */
-        if (Bin.clear) {
-            Bukkit.getServer().broadcastMessage(LanguageConfig.getString("Bin.binClear"));
-        }
-
+        index = 0;
+        clearNum = 0;
+        Collections.synchronizedList(chunks).clear();
     }
 }
