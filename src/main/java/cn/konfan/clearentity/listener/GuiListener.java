@@ -12,21 +12,38 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class GuiListener implements Listener {
 
     @EventHandler
     public void onBin(InventoryClickEvent event) {
+        if (event.getSlot() > 44) {
+            event.setCancelled(true);
+            return;
+        }
+        String previousPage = LanguageConfig.getString("Bin.previousPage");
+        String nextPage = LanguageConfig.getString("Bin.nextPage");
         if (!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player) event.getWhoClicked();
         if (!Bin.isOpenBin(event.getClickedInventory())) return;
-        if (event.getSlot() > 44) {
-            event.setCancelled(true);
+        ItemStack itemStack = event.getCurrentItem();
+
+        if (itemStack != null) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null) {
+                if (itemMeta.getDisplayName().equals(previousPage) | itemMeta.getDisplayName().equals(nextPage) | itemMeta.getDisplayName().equals("§aclearentity")) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
         if (event.getSlot() == 46) {
             if (!Bin.goPreviousPage(player)) {
                 player.sendMessage(LanguageConfig.getString("Bin.notPreviousPage"));
             }
+            return;
         }
         if (event.getSlot() == 52) {
             if (!Bin.goNextPage(player)) {
