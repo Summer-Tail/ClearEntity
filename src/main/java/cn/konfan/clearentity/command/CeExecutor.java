@@ -4,8 +4,10 @@ import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.command.search.Search;
 import cn.konfan.clearentity.config.LanguageConfig;
 import cn.konfan.clearentity.gui.Bin;
+import cn.konfan.clearentity.task.Clear.Rules;
 import cn.konfan.clearentity.task.EntityClear;
 import cn.konfan.clearentity.task.ItemClear;
+import com.sun.javafx.css.Rule;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -50,6 +52,11 @@ public class CeExecutor implements TabExecutor {
                 break;
             case "reload":
                 this.reload(sender);
+                break;
+            case "rules":
+                if (args.length >= 2) {
+                    this.rulesTest(args[1], sender);
+                }
                 break;
             default:
                 help(sender);
@@ -131,6 +138,11 @@ public class CeExecutor implements TabExecutor {
         } else {
             sender.sendMessage(LanguageConfig.getString("Other.notConsole"));
         }
+    }
+
+    private void rulesTest(String entityName, CommandSender sender) {
+        Rules.getDebugRules(entityName);
+        sender.sendMessage("结果请查看控制台...");
     }
 
     private void reload(CommandSender sender) {

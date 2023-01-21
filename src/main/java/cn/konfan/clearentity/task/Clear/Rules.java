@@ -7,6 +7,8 @@ package cn.konfan.clearentity.task.Clear;
 import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.nms.NMSUtils;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -22,6 +24,23 @@ public class Rules {
     static FileConfiguration config = ClearEntity.getInstance().getConfig();
 
     public static boolean getRules(Entity entity) {
+        return getRules(entity, false);
+    }
+
+    public static void getDebugRules(String entityName) {
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                String saveID = NMSUtils.getSaveID(entity);
+                if (saveID.equals(entityName)) {
+                    getRules(entity, true);
+                    return;
+                }
+            }
+        }
+        ClearEntity.getInstance().getLogger().info("无法找到该实体，无法测试....");
+    }
+
+    public static boolean getRules(Entity entity, boolean debug) {
         /**
          * Reload config
          */
@@ -44,6 +63,7 @@ public class Rules {
          * Rename Entity
          */
         if (saveID.startsWith("minecraft:") && !config.getBoolean("EntityManager.Rename") && !StringUtils.isBlank(entity.getCustomName())) {
+            sendDebugInfo(debug, saveID, "NoClearRenameEntity", false);
             return false;
         }
 
@@ -58,19 +78,23 @@ public class Rules {
 
 
         if (white.contains(saveID)) {
+            sendDebugInfo(debug, saveID, "White", false);
             return false;
         }
         if (black.contains(saveID)) {
+            sendDebugInfo(debug, saveID, "Black", true);
             return true;
         }
 
 
         if (!config.getBoolean("EntityManager.Rules.mode") || saveID.startsWith("minecraft:")) {
             if ((white.contains("animals") && entity instanceof Animals) || white.contains("monster") && entity instanceof Monster) {
+                sendDebugInfo(debug, saveID, "animals", false);
                 return false;
             }
         }
         if (!config.getBoolean("EntityManager.Rules.mode") || saveID.startsWith("minecraft:")) {
+            sendDebugInfo(debug, saveID, "monster", true);
             return (black.contains("monster") && entity instanceof Monster) || (black.contains("animals") && entity instanceof Animals);
         }
 
@@ -78,6 +102,7 @@ public class Rules {
         /**
          *  unknown
          */
+        sendDebugInfo(debug, saveID, "unknown", false);
         return false;
     }
 
@@ -155,4 +180,15 @@ public class Rules {
 
         return true;
     }
+
+    private static void sendDebugInfo(boolean enable, String saveID, String rulesName, boolean result) {
+        if (enable) {
+            ClearEntity.getInstance().getLogger().info("----------------------------------------------------");
+            ClearEntity.getInstance().getLogger().info("SaveID: " + saveID);
+            ClearEntity.getInstance().getLogger().info("Matched: " + rulesName);
+            ClearEntity.getInstance().getLogger().info("Result: " + result);
+            ClearEntity.getInstance().getLogger().info("----------------------------------------------------");
+        }
+    }
+
 }
