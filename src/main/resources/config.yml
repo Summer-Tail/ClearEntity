@@ -68,6 +68,8 @@ EntityManager:
     blacklist:
       #怪物
       - "monster"
+     #匹配所有实体
+     #- "minecraft:*"
 
     #掉落物
     item:
