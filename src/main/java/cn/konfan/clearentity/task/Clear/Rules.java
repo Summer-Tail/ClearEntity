@@ -14,9 +14,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Rules {
     static FileConfiguration config = ClearEntity.getInstance().getConfig();
@@ -75,13 +77,24 @@ public class Rules {
         List<String> white = rules.getStringList("whitelist");
 
 
-        if (white.contains(saveID)) {
-            sendDebugInfo(debug, saveID, "White", false);
-            return false;
+        for (String list : white) {
+            if (list.endsWith(":*") && saveID.contains(list.replaceAll(":\\*", ""))) {
+                sendDebugInfo(debug, saveID, "Like White", false);
+                return false;
+            } else if (saveID.equalsIgnoreCase(list)) {
+                sendDebugInfo(debug, saveID, "White", false);
+                return false;
+            }
         }
-        if (black.contains(saveID)) {
-            sendDebugInfo(debug, saveID, "Black", true);
-            return true;
+
+        for (String list : black) {
+            if (list.endsWith(":*") && saveID.contains(list.replaceAll(":\\*", ""))) {
+                sendDebugInfo(debug, saveID, "Like Black", true);
+                return true;
+            } else if (saveID.equalsIgnoreCase(list)) {
+                sendDebugInfo(debug, saveID, "Black", true);
+                return true;
+            }
         }
 
 
@@ -92,8 +105,10 @@ public class Rules {
             }
         }
         if (!config.getBoolean("EntityManager.Rules.mode") || saveID.startsWith("minecraft:")) {
-            sendDebugInfo(debug, saveID, "monster", true);
-            return (black.contains("monster") && entity instanceof Monster) || (black.contains("animals") && entity instanceof Animals);
+            if (black.contains("monster") && entity instanceof Monster || black.contains("animals") && entity instanceof Animals) {
+                sendDebugInfo(debug, saveID, "monster", true);
+                return true;
+            }
         }
 
 
