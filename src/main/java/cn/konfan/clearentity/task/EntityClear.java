@@ -6,7 +6,7 @@ package cn.konfan.clearentity.task;
 
 import cn.konfan.clearentity.ClearEntity;
 import cn.konfan.clearentity.config.LanguageConfig;
-import cn.konfan.clearentity.gui.Bin;
+
 import cn.konfan.clearentity.task.Clear.Rules;
 import cn.konfan.clearentity.utils.BossBarUtils;
 import org.bukkit.Bukkit;
@@ -17,8 +17,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 
 public class EntityClear implements Runnable {

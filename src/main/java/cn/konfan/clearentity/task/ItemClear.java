@@ -5,7 +5,6 @@
 package cn.konfan.clearentity.task;
 
 import cn.konfan.clearentity.ClearEntity;
-import cn.konfan.clearentity.config.LanguageConfig;
 import cn.konfan.clearentity.gui.Bin;
 import cn.konfan.clearentity.task.Clear.Rules;
 import org.bukkit.Bukkit;
