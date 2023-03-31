@@ -39,7 +39,8 @@ public class Bin {
     }
 
     public static Integer getPages(Player player) {
-        return getPages().get(player.getUniqueId());
+        Integer page = getPages().get(player.getUniqueId());
+        return page==null?0:page;
     }
 
     public static void open(Player player, Integer page) {
