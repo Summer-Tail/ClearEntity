@@ -40,7 +40,7 @@ public class Bin {
 
     public static Integer getPages(Player player) {
         Integer page = getPages().get(player.getUniqueId());
-        return page==null?0:page;
+        return page == null ? 0 : page;
     }
 
     public static void open(Player player, Integer page) {
@@ -87,12 +87,12 @@ public class Bin {
     }
 
     public static void closeAllGui() {
-        getPages().forEach((uuid,integer)->{
-           Player player = Bukkit.getPlayer(uuid);
-           if (player!=null){
-               player.closeInventory();
-           }
-       });
+        getPages().forEach((uuid, integer) -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                player.closeInventory();
+            }
+        });
     }
 
     public static void clearInv() {
@@ -102,24 +102,29 @@ public class Bin {
 
     /**
      * 重置Gui
+     *
      * @param page 页
      */
-    private static void resetGui(int page){
+    private static void resetGui(int page) {
         String previousPage = LanguageConfig.getString("Bin.previousPage");
         String nextPage = LanguageConfig.getString("Bin.nextPage");
+
+        //清除原有翻页与占位按钮
         for (ItemStack itemStack : invs.get(page)) {
-            if (itemStack==null){
+            if (itemStack == null) {
                 continue;
             }
             ItemMeta itemMeta = itemStack.getItemMeta();
-            if (itemMeta == null){
+            if (itemMeta == null) {
                 continue;
             }
-            if (itemMeta.getDisplayName().equals(previousPage)|itemMeta.getDisplayName().equals(nextPage)|itemMeta.getDisplayName().equals("§aclearentity")){
+            if (itemMeta.getDisplayName().equals(previousPage) | itemMeta.getDisplayName().equals(nextPage) | itemMeta.getDisplayName().equals("§aclearentity")) {
                 itemStack.setAmount(0);
             }
 
         }
+
+        //重新创建翻页占位按钮
         //版本兼容
         Material material = Material.getMaterial("STAINED_GLASS_PANE") != null ?
                 Material.getMaterial("STAINED_GLASS_PANE") : Material.getMaterial("GRAY_STAINED_GLASS_PANE");
