@@ -133,6 +133,8 @@ public class NMSUtils {
                     methodName = method.getName();
                 } else if (method.getName().equalsIgnoreCase("bq")) {
                     methodName = method.getName();
+                } else if (method.getName().equalsIgnoreCase("bp")) {
+                    methodName = method.getName();
                 }
             }
             nmsEntity.getClass().getMethod(methodName).invoke(nmsEntity);
