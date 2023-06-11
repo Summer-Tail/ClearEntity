@@ -13,6 +13,12 @@ public class BinClearTask implements Runnable {
 
     @Override
     public void run() {
+
+        if (!ClearEntity.getInstance().getConfig().getBoolean("EntityManager.Bin.enable")){
+            return;
+        }
+
+
         int cTime = ClearEntity.getInstance().getConfig().getInt("EntityManager.Bin.cTime");
         runTime++;
         if (runTime < cTime) {

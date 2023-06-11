@@ -36,6 +36,9 @@ public class CeExecutor implements TabExecutor {
                 }
                 break;
             case "open":
+                if (!ClearEntity.getInstance().getConfig().getBoolean("EntityManager.Bin.enable")){
+                    break;
+                }
                 if (sender.isPermissionSet("clearentity.open")) {
                     this.open(sender);
                 }
