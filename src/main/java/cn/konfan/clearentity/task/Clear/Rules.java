@@ -41,26 +41,26 @@ public class Rules {
     }
 
     public static boolean getRules(Entity entity, boolean debug) {
-        /**
-         * Reload config
+        /*
+          Reload config
          */
         config = ClearEntity.getInstance().getConfig();
-        /**
-         * Entity SaveID
+        /*
+          Entity SaveID
          */
         String saveID = NMSUtils.getSaveID(entity);
 
 
-        /**
-         * Don't clear Player
+        /*
+          Don't clear Player
          */
         if (entity instanceof Player) {
             return false;
         }
 
 
-        /**
-         * Rename Entity
+        /*
+          Rename Entity
          */
         if (saveID.startsWith("minecraft:") && !config.getBoolean("EntityManager.Rename") && !StringUtils.isBlank(entity.getCustomName())) {
             sendDebugInfo(debug, saveID, "NoClearRenameEntity", false);
@@ -68,8 +68,8 @@ public class Rules {
         }
 
 
-        /**
-         * Rules Selection
+        /*
+          Rules Selection
          */
         ConfigurationSection rules = config.getConfigurationSection("EntityManager.Rules.custom." + entity.getWorld().getName());
         rules = rules != null ? rules : config.getConfigurationSection("EntityManager.Rules");
@@ -112,8 +112,8 @@ public class Rules {
         }
 
 
-        /**
-         *  unknown
+        /*
+           unknown
          */
         sendDebugInfo(debug, saveID, "unknown", false);
         return false;
@@ -136,14 +136,17 @@ public class Rules {
         ConfigurationSection section = config.getConfigurationSection("EntityManager.Rules.custom." + item.getWorld().getName() + ".item");
         ConfigurationSection itemConfig = section == null ? config.getConfigurationSection("EntityManager.Rules.item") : section;
 
-
-        if (itemConfig == null || itemConfig.getKeys(false).size() == 1) {
-            return true;
+        if (itemConfig == null){
+            return false;
         }
+
         if (!itemConfig.getBoolean("enable")) {
             return false;
         }
 
+        if (itemConfig.getKeys(false).size() == 1) {
+            return true;
+        }
 
         for (String key : itemConfig.getKeys(false)) {
             if ("enable".equals(key)) {

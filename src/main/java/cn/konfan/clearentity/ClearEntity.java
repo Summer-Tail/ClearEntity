@@ -46,7 +46,7 @@ public final class ClearEntity extends JavaPlugin {
     }
 
     private void init() {
-        getLogger().info("Used NMS version: " + ChatColor.GREEN + NMSUtils.getNmsVersion());
+        getLogger().info("Used NMS version: " + ChatColor.GREEN + NMSUtils.getNmsVersion()+" GetSaveID: "+NMSUtils.getSaveIDMethodName());
         getLogger().info("Loading config and language file...");
         /**
          * Save default config

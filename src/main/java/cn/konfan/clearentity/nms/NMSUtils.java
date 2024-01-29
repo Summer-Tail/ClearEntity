@@ -36,18 +36,22 @@ public class NMSUtils {
      *
      * @return SaveID
      */
-    public static String getSaveID(Entity entity) {
+    public static String getSaveID(Entity entity,String getSaveIdMethod) {
         try {
             Object craftEntity = Class.forName("org.bukkit.craftbukkit." + getNmsVersion() + ".entity.CraftEntity").cast(entity);
             Method getHandle = craftEntity.getClass().getMethod("getHandle");
             Object nmsEntity = getHandle.invoke(craftEntity);
-            Object saveId = nmsEntity.getClass().getMethod(getSaveIDMethodName()).invoke(nmsEntity);
+            Object saveId = nmsEntity.getClass().getMethod(getSaveIdMethod).invoke(nmsEntity);
             return saveId == null ? "" : saveId.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
     }
+    public static String getSaveID(Entity entity){
+        return getSaveID(entity,getSaveIDMethodName());
+    }
+
 
     public static String getItemID(ItemStack stack) {
         String[] methods = {"save", "b"};
@@ -112,7 +116,7 @@ public class NMSUtils {
      *
      * @return getSaveID method
      */
-    private static String getSaveIDMethodName() {
+    public static String getSaveIDMethodName() {
         if (StringUtils.isNotEmpty(methodName)) {
             return methodName;
         }
@@ -140,6 +144,14 @@ public class NMSUtils {
                 } else if (method.getName().equalsIgnoreCase("bu")) {
                     methodName = method.getName();
                 }
+
+                //不确定版本
+                if (getSaveID(tempEntity,method.getName()).equals("minecraft:enderman")){
+                    methodName = method.getName();
+                }
+
+
+
             }
             nmsEntity.getClass().getMethod(methodName).invoke(nmsEntity);
             return methodName;
